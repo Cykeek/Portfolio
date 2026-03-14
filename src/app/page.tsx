@@ -4,7 +4,6 @@ import Navbar from '@/components/layout/Navbar';
 import Hero from '@/components/sections/Hero';
 import Work from '@/components/sections/Work';
 import Services from '@/components/sections/Services';
-import TechStack from '@/components/sections/TechStack';
 import FAQ from '@/components/sections/FAQ';
 import Footer from '@/components/sections/Footer';
 
@@ -19,9 +18,7 @@ export default function Home() {
       
       <Services />
 
-      <TechStack sectionNumber="03" />
-
-      <FAQ sectionNumber="04" />
+      <FAQ sectionNumber="03" />
 
       <Footer />
     </main>

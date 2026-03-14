@@ -20,7 +20,7 @@ export default function Pricing({ sectionNumber = "03" }: PricingProps) {
         "1 Revision",
         "2 Social Media Posts",
         "Deliverables within 1 Week",
-        "1-Hour Strategy Call",
+        "30-Min Strategy Call",
         "Assets delivered after full payment"
       ]
     },
@@ -35,6 +35,7 @@ export default function Pricing({ sectionNumber = "03" }: PricingProps) {
         "Static Website upto 5 page ( Without any Automation )",
         "Design System & Component Library",
         "Developer-Handoff Ready Documentation",
+        "1 Month Free Maintenance",
         "Assets delivered after full payment"
       ],
       isPopular: true
@@ -49,8 +50,8 @@ export default function Pricing({ sectionNumber = "03" }: PricingProps) {
         "20 Social Media Posts",
         "Full Functional Website with Backend",
         "24/7 Priority Support",
-        "Assets & Handoff delivered after full payment",
-        "1 Month Complimentary Service"
+        "3 Months Free Maintenance",
+        "Assets & Handoff delivered after full payment"
       ]
     }
   ];

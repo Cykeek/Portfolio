@@ -3,10 +3,15 @@
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
 import { SPRING_WEIGHTED } from '@/lib/motion';
 import Button from '@/components/ui/Button';
-import { LayoutGrid, Briefcase, DollarSign, Mail, HelpCircle } from 'lucide-react';
-import { useState } from 'react';
+import { LayoutGrid, Briefcase, DollarSign, Mail } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useLenis } from 'lenis/react';
 
 export default function Navbar() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const lenis = useLenis();
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const { scrollY } = useScroll();
 
@@ -17,15 +22,29 @@ export default function Navbar() {
     { name: 'CONTACT', id: 'contact', icon: Mail, isPage: true },
   ];
 
-  // Sync active state with scroll position
+  // Sync active state with pathname for standalone pages
+  useEffect(() => {
+    const currentPage = navItems.find(item => item.isPage && pathname === `/${item.id}`);
+    if (currentPage) {
+      setActiveItem(currentPage.name);
+    } else if (pathname === '/') {
+      if (typeof window !== 'undefined' && window.scrollY < 200) {
+        setActiveItem(null);
+      }
+    }
+  }, [pathname]);
+
+  // Sync active state with scroll position (only on home page)
   useMotionValueEvent(scrollY, "change", (latest) => {
+    if (pathname !== '/') return;
+
     if (latest < 200) {
       setActiveItem(null); 
       return;
     }
 
     navItems.forEach((item) => {
-      if (item.isPage) return; // Skip separate pages for scroll tracking
+      if (item.isPage) return; 
       const element = document.getElementById(item.id);
       if (element) {
         const rect = element.getBoundingClientRect();
@@ -35,6 +54,28 @@ export default function Navbar() {
       }
     });
   });
+
+  const handleLogoClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (pathname === '/') {
+      if (lenis) {
+        lenis.scrollTo('#hero', { duration: 1.5 });
+      } else {
+        document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' });
+      }
+      setActiveItem(null);
+    } else {
+      router.push('/');
+    }
+  };
+
+  const handleNavClick = (e: React.MouseEvent, item: typeof navItems[0]) => {
+    if (!item.isPage && pathname === '/') {
+      e.preventDefault();
+      lenis?.scrollTo(`#${item.id}`, { duration: 1.5 });
+      setActiveItem(item.name);
+    }
+  };
 
   const islandVariants = {
     initial: { y: -20, opacity: 0 },
@@ -46,8 +87,8 @@ export default function Navbar() {
       {/* Desktop Top Navbar */}
       <div className="fixed top-0 left-0 w-full z-50 hidden md:flex justify-between items-start px-12 py-8 pointer-events-none">
         <motion.a 
-          href="#hero"
-          onClick={() => setActiveItem(null)}
+          href="/"
+          onClick={handleLogoClick}
           variants={islandVariants}
           initial="initial"
           animate="animate"
@@ -68,7 +109,7 @@ export default function Navbar() {
             <a
               key={item.name}
               href={item.isPage ? `/${item.id}` : `/#${item.id}`}
-              onClick={() => !item.isPage && setActiveItem(item.name)}
+              onClick={(e) => handleNavClick(e, item)}
               className={`relative px-6 py-2 text-[12px] font-bold tracking-widest transition-colors duration-500 z-10 ${activeItem === item.name ? 'text-black' : 'text-white hover:text-muted'}`}
             >
               {activeItem === item.name && (
@@ -90,7 +131,7 @@ export default function Navbar() {
           transition={{ ...SPRING_WEIGHTED, delay: 0.2 }}
           className="pointer-events-auto"
         >
-          <Button variant="primary" className="!px-8 !py-3" onClick={() => window.location.href = '/contact'}>
+          <Button variant="primary" className="!px-8 !py-3" onClick={() => router.push('/contact')}>
             WANNA CHAT?
           </Button>
         </motion.div>
@@ -99,8 +140,8 @@ export default function Navbar() {
       {/* Mobile Top Header */}
       <div className="fixed top-0 left-0 w-full z-50 md:hidden flex justify-between items-center px-6 py-6 pointer-events-none">
         <motion.a 
-          href="#hero"
-          onClick={() => setActiveItem(null)}
+          href="/"
+          onClick={handleLogoClick}
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           className="pointer-events-auto bg-white/[0.03] backdrop-blur-md border border-white/10 rounded-global px-5 py-2.5 cursor-pointer"
@@ -114,7 +155,7 @@ export default function Navbar() {
           transition={{ delay: 0.1 }}
           className="pointer-events-auto"
         >
-          <Button variant="primary" className="!px-6 !py-2.5 !text-[10px]" onClick={() => window.location.href = '/contact'}>
+          <Button variant="primary" className="!px-6 !py-2.5 !text-[10px]" onClick={() => router.push('/contact')}>
             CHAT
           </Button>
         </motion.div>
@@ -132,7 +173,7 @@ export default function Navbar() {
             <a
               key={item.name}
               href={item.isPage ? `/${item.id}` : `/#${item.id}`}
-              onClick={() => !item.isPage && setActiveItem(item.name)}
+              onClick={(e) => handleNavClick(e, item)}
               className="relative flex flex-col items-center justify-center w-20 h-14 gap-1 group"
             >
               {activeItem === item.name && (
