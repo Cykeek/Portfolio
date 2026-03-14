@@ -19,6 +19,7 @@
 
   --radius-global: 100px;
   --radius-md: 50px;
+  --radius-sm: 12px;
   
   --grid-size: 100px;
 }
@@ -49,6 +50,10 @@ body {
 
 .rounded-md {
   border-radius: var(--radius-md);
+}
+
+.rounded-sm {
+  border-radius: var(--radius-sm);
 }
 
 .text-massive {
