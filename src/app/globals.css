@@ -1,0 +1,109 @@
+@import "tailwindcss";
+@theme {
+  --color-background: #000000;
+  --color-foreground: #ffffff;
+  --color-muted: #888888;
+  --color-surface: rgba(255, 255, 255, 0.05);
+  --color-border-subtle: rgba(255, 255, 255, 0.1);
+  --color-accent: #22c55e;
+  --color-grid: rgba(255, 255, 255, 0.05);
+  --color-scroll-thumb: #222222;
+  --color-scroll-thumb-hover: #444444;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  --font-size-massive: clamp(2.5rem, 5vw, 3.75rem);
+  --font-size-heading: clamp(2rem, 4vw, 3rem);
+  --font-size-body: clamp(1rem, 1.2vw, 1.125rem);
+  --font-size-technical: clamp(0.7425rem, 1.1vw, 1.1rem);
+
+  --radius-global: 100px;
+  --radius-md: 50px;
+  
+  --grid-size: 100px;
+}
+
+
+:root {
+  --background: #050505;
+  --foreground: #ffffff;
+  --color-grid: rgba(255, 255, 255, 0.02);
+  --grid-size: 60px;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), sans-serif;
+  overflow-x: hidden;
+}
+
+/* SaaS Glow Utility */
+.bg-glow {
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+}
+
+.rounded-global {
+  border-radius: var(--radius-global);
+}
+
+.rounded-md {
+  border-radius: var(--radius-md);
+}
+
+.text-massive {
+  font-size: var(--font-size-massive);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+}
+
+.text-heading {
+  font-size: var(--font-size-heading);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+}
+
+.text-body {
+  font-size: var(--font-size-body);
+  font-weight: 500;
+  line-height: 1.6;
+  color: #888888;
+}
+
+/* Custom Scrollbar for pixel-perfect look */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-scroll-thumb);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-scroll-thumb-hover);
+}
+
+/* Marquee Animation */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 20s linear infinite;
+}
+
+/* Custom Blueprint Utilities */
+.text-wireframe {
+  -webkit-text-stroke: 1px var(--color-foreground);
+  color: transparent;
+}
