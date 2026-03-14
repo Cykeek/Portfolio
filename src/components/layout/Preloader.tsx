@@ -26,7 +26,14 @@ export default function Preloader() {
   );
 
   useEffect(() => {
-    const totalDuration = 8000; // 8 seconds
+    // Check if preloader has already been shown in this session
+    const hasShown = sessionStorage.getItem('preloader_shown');
+    if (hasShown) {
+      setIsVisible(false);
+      return;
+    }
+
+    const totalDuration = 5000; // Reduced to 5 seconds for better UX
     const startTime = Date.now();
 
     const updateProgress = () => {
@@ -37,6 +44,7 @@ export default function Preloader() {
       if (newProgress < 100) {
         requestAnimationFrame(updateProgress);
       } else {
+        sessionStorage.setItem('preloader_shown', 'true');
         setTimeout(() => setIsVisible(false), 800);
       }
     };

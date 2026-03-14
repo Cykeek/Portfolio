@@ -22,10 +22,10 @@ export default function Footer() {
   }, []);
 
   const links = [
-    { name: 'WORKS', href: '#works', icon: LayoutGrid },
-    { name: 'SERVICES', href: '#services', icon: Briefcase },
-    { name: 'PRICING', href: '#pricing', icon: DollarSign },
-    { name: 'CONTACT', href: '#contact', icon: Mail },
+    { name: 'WORKS', href: '/#works', icon: LayoutGrid },
+    { name: 'SERVICES', href: '/#services', icon: Briefcase },
+    { name: 'PRICING', href: '/pricing', icon: DollarSign },
+    { name: 'CONTACT', href: '/contact', icon: Mail },
   ];
 
   return (

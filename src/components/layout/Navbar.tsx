@@ -67,7 +67,7 @@ export default function Navbar() {
           {navItems.map((item) => (
             <a
               key={item.name}
-              href={item.isPage ? `/${item.id}` : `#${item.id}`}
+              href={item.isPage ? `/${item.id}` : `/#${item.id}`}
               onClick={() => !item.isPage && setActiveItem(item.name)}
               className={`relative px-6 py-2 text-[12px] font-bold tracking-widest transition-colors duration-500 z-10 ${activeItem === item.name ? 'text-black' : 'text-white hover:text-muted'}`}
             >
@@ -131,7 +131,7 @@ export default function Navbar() {
           {navItems.map((item) => (
             <a
               key={item.name}
-              href={item.isPage ? `/${item.id}` : `#${item.id}`}
+              href={item.isPage ? `/${item.id}` : `/#${item.id}`}
               onClick={() => !item.isPage && setActiveItem(item.name)}
               className="relative flex flex-col items-center justify-center w-20 h-14 gap-1 group"
             >

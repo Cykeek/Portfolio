@@ -6,7 +6,11 @@ import { SPRING_WEIGHTED } from '@/lib/motion';
 import { useState } from 'react';
 import { Activity, Layers, BarChart3 } from 'lucide-react';
 
-export default function FAQ() {
+interface FAQProps {
+  sectionNumber?: string;
+}
+
+export default function FAQ({ sectionNumber = "03" }: FAQProps) {
   const [activeCategory, setActiveCategory] = useState('PROCESS');
 
   const faqData = {
@@ -38,7 +42,7 @@ export default function FAQ() {
   return (
     <section id="faq" className="py-32 px-6 max-w-7xl mx-auto">
       <div className="flex flex-col gap-4 mb-20 items-center text-center">
-        <span className="text-[12px] font-medium tracking-[0.3em] text-muted uppercase">03 // INQUIRIES</span>
+        <span className="text-[12px] font-medium tracking-[0.3em] text-muted uppercase">{sectionNumber} // INQUIRIES</span>
         <h2 className="text-heading">System <br /> Insights</h2>
       </div>
 
