@@ -93,7 +93,11 @@ function EngineeringIllustration() {
   );
 }
 
-export default function Services() {
+interface ServicesProps {
+  sectionNumber?: string;
+}
+
+export default function Services({ sectionNumber = "01" }: ServicesProps) {
   const services = [
     {
       title: "UI/UX DESIGN",
@@ -112,7 +116,7 @@ export default function Services() {
   return (
     <section id="services" className="py-32 px-6 max-w-7xl mx-auto">
       <div className="flex flex-col gap-4 mb-20">
-        <span className="text-[12px] font-medium tracking-[0.3em] text-muted uppercase">02 // CAPABILITIES</span>
+        <span className="text-[12px] font-medium tracking-[0.3em] text-muted uppercase">{sectionNumber} {"//"} CAPABILITIES</span>
         <h2 className="text-heading">System <br /> Standards</h2>
       </div>
 

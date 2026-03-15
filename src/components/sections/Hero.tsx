@@ -27,8 +27,8 @@ export default function Hero() {
 
         {/* Main Headline */}
         <h1 className="text-massive tracking-tighter mb-6 uppercase">
-          I&apos;m cykeek. <br /> 
-          2 years of crafting <span className="text-muted">digital excellence.</span>
+          Design Engineering <br /> 
+          <span className="text-muted">for Global Brands.</span>
         </h1>
 
         {/* Sub-headline - STANDARDIZED BODY */}
@@ -42,10 +42,21 @@ export default function Hero() {
 
         {/* CTAs */}
         <div className="flex flex-col sm:flex-row items-center gap-8">
-          <Button variant="primary" icon="arrow">
+          <Button 
+            variant="primary" 
+            icon="arrow"
+            onClick={() => {
+              const el = document.getElementById('works');
+              el?.scrollIntoView({ behavior: 'smooth' });
+            }}
+          >
             View My Work
           </Button>
-          <Button variant="secondary" icon="chevron">
+          <Button 
+            variant="secondary" 
+            icon="chevron"
+            onClick={() => window.location.href = '/pricing'}
+          >
             Read My Story
           </Button>
         </div>

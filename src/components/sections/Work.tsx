@@ -2,7 +2,11 @@
 
 import ProjectCard from '@/components/ui/ProjectCard';
 
-export default function Work() {
+interface WorkProps {
+  sectionNumber?: string;
+}
+
+export default function Work({ sectionNumber = "01" }: WorkProps) {
   const projects = [
     {
       date: "2024",
@@ -28,7 +32,7 @@ export default function Work() {
     <section id="works" className="py-32 px-6 max-w-7xl mx-auto">
       <div className="flex justify-between items-end mb-20">
         <div className="flex flex-col gap-4">
-          <span className="text-[12px] font-medium tracking-[0.3em] text-muted uppercase">01 // SELECTED ARCHIVE</span>
+          <span className="text-[12px] font-medium tracking-[0.3em] text-muted uppercase">{sectionNumber} {"//"} SELECTED ARCHIVE</span>
           <h2 className="text-heading">Featured <br /> Projects</h2>
         </div>
         <span className="hidden md:block text-muted font-sans text-[12px] opacity-50 tracking-widest">(2022-2024)</span>

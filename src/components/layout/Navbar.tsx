@@ -3,14 +3,12 @@
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
 import { SPRING_WEIGHTED } from '@/lib/motion';
 import Button from '@/components/ui/Button';
-import { LayoutGrid, Briefcase, DollarSign, Mail } from 'lucide-react';
+import { DollarSign, Mail } from 'lucide-react';
 import { useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useLenis } from 'lenis/react';
 
 const navItems = [
-  { name: 'WORKS', id: 'works', icon: LayoutGrid, isPage: false },
-  { name: 'SERVICES', id: 'services', icon: Briefcase, isPage: false },
   { name: 'PRICING', id: 'pricing', icon: DollarSign, isPage: true },
   { name: 'CONTACT', id: 'contact', icon: Mail, isPage: true },
 ];
@@ -90,12 +88,13 @@ export default function Navbar() {
           <span className="text-[12px] font-medium tracking-[0.2em] uppercase text-white">CYKEEK</span>
         </motion.a>
 
+        {/* Absolutely centered nav pill */}
         <motion.nav 
           variants={islandVariants}
           initial="initial"
           animate="animate"
           transition={{ ...SPRING_WEIGHTED, delay: 0.1 }}
-          className="pointer-events-auto relative bg-white/[0.03] backdrop-blur-md border border-white/10 rounded-global px-2 py-2 shadow-xl flex items-center gap-2"
+          className="pointer-events-auto absolute left-1/2 top-8 -translate-x-1/2 bg-white/[0.03] backdrop-blur-md border border-white/10 rounded-global px-2 py-2 shadow-xl flex items-center gap-2"
         >
           {navItems.map((item) => (
             <a
