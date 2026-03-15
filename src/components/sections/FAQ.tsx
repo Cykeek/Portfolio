@@ -42,7 +42,7 @@ export default function FAQ({ sectionNumber = "03" }: FAQProps) {
   return (
     <section id="faq" className="py-32 px-6 max-w-7xl mx-auto">
       <div className="flex flex-col gap-4 mb-20 items-center text-center">
-        <span className="text-[12px] font-medium tracking-[0.3em] text-muted uppercase">{sectionNumber} // INQUIRIES</span>
+        <span className="text-[12px] font-medium tracking-[0.3em] text-muted uppercase">{sectionNumber}{' // INQUIRIES'}</span>
         <h2 className="text-heading">System <br /> Insights</h2>
       </div>
 
@@ -90,7 +90,7 @@ export default function FAQ({ sectionNumber = "03" }: FAQProps) {
               >
                 {faqData[activeCategory as keyof typeof faqData].questions.map((item, i) => (
                   <div key={i} className="flex flex-col gap-4 group">
-                    <span className="text-[10px] font-sans text-muted opacity-50">0{i + 1} // QUESTION</span>
+                    <span className="text-[10px] font-sans text-muted opacity-50">0{i + 1}{' // QUESTION'}</span>
                     <h3 className="text-2xl md:text-3xl font-bold tracking-tighter">
                       {item.q}
                     </h3>

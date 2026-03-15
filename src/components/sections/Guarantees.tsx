@@ -37,11 +37,11 @@ export default function Guarantees({ sectionNumber = "04" }: GuaranteesProps) {
     <section id="guarantees" className="py-24 px-6 max-w-7xl mx-auto overflow-hidden">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
         <div className="flex flex-col gap-4">
-          <span className="text-[12px] font-medium tracking-[0.3em] text-muted uppercase">{sectionNumber} // PERFORMANCE GURANTEES</span>
+          <span className="text-[12px] font-medium tracking-[0.3em] text-muted uppercase">{sectionNumber}{' // PERFORMANCE GURANTEES'}</span>
           <h2 className="text-heading leading-tight">Built for <br /> Excellence</h2>
         </div>
         <p className="text-body max-w-md text-muted text-sm md:text-base leading-relaxed">
-          I don't just design interfaces; I engineer high-performance digital products 
+          I don&apos;t just design interfaces; I engineer high-performance digital products 
           that provide a competitive edge for your business.
         </p>
       </div>

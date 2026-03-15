@@ -2,6 +2,7 @@
 
 import { motion, Variants } from 'framer-motion';
 import { ArrowRight, ChevronRight } from 'lucide-react';
+import { SPRING_SNAPPY } from '@/lib/motion';
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -20,14 +21,24 @@ export default function Button({
 }: ButtonProps) {
   
   const isPrimary = variant === 'primary';
+  const isSecondary = variant === 'secondary';
   const isGhost = variant === 'ghost';
 
-  // Instant hover for text/icon container to avoid CSS interference
+  // Animation for the text and icons inside
   const contentVariants: Variants = {
-    initial: { letterSpacing: '0.1em' },
+    initial: { x: 0 },
     hover: { 
-      letterSpacing: variant !== 'primary' ? '0.25em' : '0.1em',
-      transition: { duration: 0.2, ease: "easeOut" as any } 
+      x: isGhost ? 4 : 0,
+      transition: SPRING_SNAPPY 
+    }
+  };
+
+  // Animation for the background fill
+  const fillVariants: Variants = {
+    initial: { x: '-101%' },
+    hover: { 
+      x: '0%',
+      transition: { ...SPRING_SNAPPY, bounce: 0 }
     }
   };
 
@@ -35,8 +46,8 @@ export default function Button({
   const arrowVariants: Variants = {
     initial: { x: 0 },
     hover: { 
-      x: [0, 5, 0],
-      transition: { repeat: Infinity, duration: 0.8, ease: "easeInOut" as any }
+      x: 5,
+      transition: SPRING_SNAPPY
     }
   };
 
@@ -47,19 +58,35 @@ export default function Button({
       whileTap="tap"
       onClick={onClick}
       className={`
-        group relative text-[13px] font-medium tracking-widest uppercase rounded-global flex items-center justify-center
-        ${isPrimary ? 'px-10 py-4 bg-white text-black shadow-2xl shadow-white/10' : ''}
-        ${variant === 'secondary' ? 'px-8 py-4 text-muted border border-white/5 hover:border-white/20 hover:text-white' : ''}
+        group relative text-[13px] font-medium tracking-widest uppercase rounded-global flex items-center justify-center overflow-hidden
+        ${isPrimary ? 'px-10 py-4 bg-white text-black shadow-2xl shadow-white/10 hover:text-white transition-colors duration-300' : ''}
+        ${isSecondary ? 'px-8 py-4 text-white border border-white/10 hover:text-black transition-colors duration-300' : ''}
         ${isGhost ? 'px-0 py-2 text-muted hover:text-white' : ''}
         ${className}
       `}
       variants={{
         initial: { scale: 1 },
-        hover: { scale: 1.05 },
-        tap: { scale: 0.95 }
+        hover: { scale: 1.02 },
+        tap: { scale: 0.98 }
       }}
-      transition={{ type: "spring", stiffness: 800, damping: 15 }}
+      transition={SPRING_SNAPPY}
     >
+      {/* Slide Fill for Primary (Black Fill) */}
+      {isPrimary && (
+        <motion.div
+          className="absolute inset-0 bg-black z-0 rounded-global"
+          variants={fillVariants}
+        />
+      )}
+
+      {/* Slide Fill for Secondary (White Fill) */}
+      {isSecondary && (
+        <motion.div
+          className="absolute inset-0 bg-white z-0 rounded-global"
+          variants={fillVariants}
+        />
+      )}
+
       <motion.span 
         variants={contentVariants}
         className="relative z-10 flex items-center gap-3"
@@ -79,8 +106,6 @@ export default function Button({
           </motion.div>
         )}
       </motion.span>
-
-      {/* No background sweep for secondary */}
     </motion.button>
   );
 }

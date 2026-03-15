@@ -41,7 +41,7 @@ export default function Roadmap({ sectionNumber = "05" }: RoadmapProps) {
     <section id="roadmap" className="py-24 px-6 max-w-7xl mx-auto overflow-hidden">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
         <div className="flex flex-col gap-4">
-          <span className="text-[12px] font-medium tracking-[0.3em] text-muted uppercase">{sectionNumber} // ENGAGEMENT ROADMAP</span>
+          <span className="text-[12px] font-medium tracking-[0.3em] text-muted uppercase">{sectionNumber} {"//"} ENGAGEMENT ROADMAP</span>
           <h2 className="text-heading leading-tight">Systematic <br /> Workflow</h2>
         </div>
         <p className="text-body max-w-md text-muted text-sm md:text-base leading-relaxed">
@@ -57,7 +57,7 @@ export default function Roadmap({ sectionNumber = "05" }: RoadmapProps) {
         viewport={{ once: true }}
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
       >
-        {steps.map((step, index) => (
+        {steps.map((step) => (
           <motion.div 
             key={step.phase}
             variants={{

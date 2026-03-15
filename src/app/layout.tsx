@@ -4,7 +4,6 @@ import "./globals.css";
 import SmoothScroll from "@/components/layout/SmoothScroll";
 import GridOverlay from "@/components/layout/GridOverlay";
 import GlobalBackground from "@/components/layout/GlobalBackground";
-import Preloader from "@/components/layout/Preloader";
 import PageTransition from "@/components/layout/PageTransition";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
@@ -36,7 +35,6 @@ export default function RootLayout({
       >
         <GlobalBackground />
         <GridOverlay />
-        <Preloader />
         <SmoothScroll>
           <PageTransition>
             {children}

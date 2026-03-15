@@ -50,7 +50,7 @@ function EngineeringIllustration() {
     <div className="w-full h-full p-8 flex flex-col gap-3 font-mono text-[8px] text-white/20">
       <div className="flex gap-2">
         <span className="text-white/40">01</span>
-        <span>import {'{'} motion {'}'} from 'framer-motion';</span>
+        <span>import {'{'} motion {'}'} from &apos;framer-motion&apos;;</span>
       </div>
       <div className="flex gap-2">
         <span className="text-white/40">02</span>

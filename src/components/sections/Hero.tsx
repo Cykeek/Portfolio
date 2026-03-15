@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { SPRING_WEIGHTED } from '@/lib/motion';
 import Button from '@/components/ui/Button';
+import Image from 'next/image';
 
 export default function Hero() {
   return (
@@ -26,7 +27,7 @@ export default function Hero() {
 
         {/* Main Headline */}
         <h1 className="text-massive tracking-tighter mb-6 uppercase">
-          I'm cykeek. <br /> 
+          I&apos;m cykeek. <br /> 
           2 years of crafting <span className="text-muted">digital excellence.</span>
         </h1>
 
@@ -34,7 +35,7 @@ export default function Hero() {
         <p className="text-body max-w-2xl mb-12">
           Product Designer at{' '}
           <span className="inline-flex items-center px-4 py-1.5 bg-white text-black rounded-global transition-transform hover:scale-105 cursor-pointer align-middle mb-1">
-            <img src="/Studio.svg" alt="Studio 1947" className="h-4 w-auto brightness-0" />
+            <Image src="/Studio.svg" alt="Studio 1947" width={100} height={16} className="h-4 w-auto brightness-0" />
           </span>
           {' '}where I spend my time bridging the gap between complex engineering and design to build products that people actually love using.
         </p>

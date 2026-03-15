@@ -4,42 +4,34 @@ import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
 import { SPRING_WEIGHTED } from '@/lib/motion';
 import Button from '@/components/ui/Button';
 import { LayoutGrid, Briefcase, DollarSign, Mail } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useLenis } from 'lenis/react';
+
+const navItems = [
+  { name: 'WORKS', id: 'works', icon: LayoutGrid, isPage: false },
+  { name: 'SERVICES', id: 'services', icon: Briefcase, isPage: false },
+  { name: 'PRICING', id: 'pricing', icon: DollarSign, isPage: true },
+  { name: 'CONTACT', id: 'contact', icon: Mail, isPage: true },
+];
 
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const lenis = useLenis();
-  const [activeItem, setActiveItem] = useState<string | null>(null);
+  const [scrollActiveItem, setScrollActiveItem] = useState<string | null>(null);
   const { scrollY } = useScroll();
 
-  const navItems = [
-    { name: 'WORKS', id: 'works', icon: LayoutGrid, isPage: false },
-    { name: 'SERVICES', id: 'services', icon: Briefcase, isPage: false },
-    { name: 'PRICING', id: 'pricing', icon: DollarSign, isPage: true },
-    { name: 'CONTACT', id: 'contact', icon: Mail, isPage: true },
-  ];
-
-  // Sync active state with pathname for standalone pages
-  useEffect(() => {
-    const currentPage = navItems.find(item => item.isPage && pathname === `/${item.id}`);
-    if (currentPage) {
-      setActiveItem(currentPage.name);
-    } else if (pathname === '/') {
-      if (typeof window !== 'undefined' && window.scrollY < 200) {
-        setActiveItem(null);
-      }
-    }
-  }, [pathname]);
+  const activeItem = pathname === '/' 
+    ? scrollActiveItem 
+    : navItems.find(item => item.isPage && pathname === `/${item.id}`)?.name || null;
 
   // Sync active state with scroll position (only on home page)
   useMotionValueEvent(scrollY, "change", (latest) => {
     if (pathname !== '/') return;
 
     if (latest < 200) {
-      setActiveItem(null); 
+      setScrollActiveItem(null); 
       return;
     }
 
@@ -49,7 +41,7 @@ export default function Navbar() {
       if (element) {
         const rect = element.getBoundingClientRect();
         if (rect.top >= -100 && rect.top <= 400) {
-          setActiveItem(item.name);
+          setScrollActiveItem(item.name);
         }
       }
     });
@@ -63,7 +55,7 @@ export default function Navbar() {
       } else {
         document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' });
       }
-      setActiveItem(null);
+      setScrollActiveItem(null);
     } else {
       router.push('/');
     }
@@ -73,7 +65,7 @@ export default function Navbar() {
     if (!item.isPage && pathname === '/') {
       e.preventDefault();
       lenis?.scrollTo(`#${item.id}`, { duration: 1.5 });
-      setActiveItem(item.name);
+      setScrollActiveItem(item.name);
     }
   };
 

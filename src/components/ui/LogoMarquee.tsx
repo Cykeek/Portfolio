@@ -18,7 +18,7 @@ import { GoogleCloud } from './icons/GoogleCloud';
 import { Meta } from './icons/Meta';
 import { Instagram } from './icons/Instagram';
 
-const iconMap: Record<string, any> = {
+const iconMap: Record<string, React.ElementType> = {
   figma: Figma,
   adobe: Adobe,
   nextjs: Nextjs,

@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import { SPRING_WEIGHTED } from '@/lib/motion';
-import { Send, CheckCircle2 } from 'lucide-react';
+import { CheckCircle2 } from 'lucide-react';
 
 export default function ContactForm() {
   const [activeService, setActiveService] = useState<string | null>(null);

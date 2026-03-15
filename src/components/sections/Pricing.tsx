@@ -59,7 +59,7 @@ export default function Pricing({ sectionNumber = "03" }: PricingProps) {
   return (
     <section id="pricing" className="py-32 px-6 max-w-7xl mx-auto">
       <div className="flex flex-col gap-4 mb-20">
-        <span className="text-[12px] font-medium tracking-[0.3em] text-muted uppercase">{sectionNumber} // PRICING</span>
+        <span className="text-[12px] font-medium tracking-[0.3em] text-muted uppercase">{sectionNumber} {"//"} PRICING</span>
         <h2 className="text-heading">Strategic <br /> Investment</h2>
         <p className="text-body max-w-xl text-muted">
           Transparent pricing tailored to the scope of your project. 
@@ -90,8 +90,8 @@ export default function Pricing({ sectionNumber = "03" }: PricingProps) {
         <div className="flex flex-col gap-4 text-center md:text-left">
           <h3 className="text-2xl md:text-3xl font-bold tracking-tighter">Have a different plan in mind?</h3>
           <p className="text-muted text-sm md:text-base max-w-xl">
-            We provide custom pricing for unique projects that don't fit into our standard tiers. 
-            Let's discuss your specific requirements and build a tailored solution.
+            We provide custom pricing for unique projects that don&apos;t fit into our standard tiers. 
+            Let&apos;s discuss your specific requirements and build a tailored solution.
           </p>
         </div>
         <Button 

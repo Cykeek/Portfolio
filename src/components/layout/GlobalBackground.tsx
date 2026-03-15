@@ -3,6 +3,50 @@
 import { useEffect, useRef } from 'react';
 import { useMotionValue, useSpring, useScroll, useTransform } from 'framer-motion';
 
+class Star {
+  x: number;
+  y: number;
+  z: number;
+  pz: number;
+
+  constructor(width: number, height: number) {
+    this.x = Math.random() * width - width / 2;
+    this.y = Math.random() * height - height / 2;
+    this.z = Math.random() * width;
+    this.pz = this.z;
+  }
+
+  update(speed: number, width: number, height: number) {
+    this.z = this.z - speed;
+    if (this.z < 1) {
+      this.z = width;
+      this.x = Math.random() * width - width / 2;
+      this.y = Math.random() * height - height / 2;
+      this.pz = this.z;
+    }
+  }
+
+  draw(context: CanvasRenderingContext2D, width: number, height: number, centerX: number, centerY: number, speed: number) {
+    const sx = (this.x / this.z) * width + centerX;
+    const sy = (this.y / this.z) * height + centerY;
+
+    const r = (1 - this.z / width) * 2; 
+    
+    const px = (this.x / this.pz) * width + centerX;
+    const py = (this.y / this.pz) * height + centerY;
+
+    context.beginPath();
+    // Brighten stars as they get faster/closer
+    context.strokeStyle = `rgba(255, 255, 255, ${Math.min(1, (1 - this.z / width) * (1 + speed / 10))})`;
+    context.lineWidth = r;
+    context.moveTo(px, py);
+    context.lineTo(sx, sy);
+    context.stroke();
+
+    this.pz = this.z;
+  }
+}
+
 export default function GlobalBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseX = useMotionValue(0);
@@ -31,56 +75,12 @@ export default function GlobalBackground() {
     let width = window.innerWidth;
     let height = window.innerHeight;
 
-    class Star {
-      x: number;
-      y: number;
-      z: number;
-      pz: number;
-
-      constructor() {
-        this.x = Math.random() * width - width / 2;
-        this.y = Math.random() * height - height / 2;
-        this.z = Math.random() * width;
-        this.pz = this.z;
-      }
-
-      update(speed: number) {
-        this.z = this.z - speed;
-        if (this.z < 1) {
-          this.z = width;
-          this.x = Math.random() * width - width / 2;
-          this.y = Math.random() * height - height / 2;
-          this.pz = this.z;
-        }
-      }
-
-      draw(context: CanvasRenderingContext2D, centerX: number, centerY: number, speed: number) {
-        const sx = (this.x / this.z) * width + centerX;
-        const sy = (this.y / this.z) * height + centerY;
-
-        const r = (1 - this.z / width) * 2; 
-        
-        const px = (this.x / this.pz) * width + centerX;
-        const py = (this.y / this.pz) * height + centerY;
-
-        context.beginPath();
-        // Brighten stars as they get faster/closer
-        context.strokeStyle = `rgba(255, 255, 255, ${Math.min(1, (1 - this.z / width) * (1 + speed / 10))})`;
-        context.lineWidth = r;
-        context.moveTo(px, py);
-        context.lineTo(sx, sy);
-        context.stroke();
-
-        this.pz = this.z;
-      }
-    }
-
     const init = () => {
       width = window.innerWidth;
       height = window.innerHeight;
       canvas.width = width;
       canvas.height = height;
-      stars = Array.from({ length: starCount }, () => new Star());
+      stars = Array.from({ length: starCount }, () => new Star(width, height));
     };
 
     const animate = () => {
@@ -96,8 +96,8 @@ export default function GlobalBackground() {
       const centerY = height / 2 + mY;
 
       stars.forEach(star => {
-        star.update(currentSpeed);
-        star.draw(ctx, centerX, centerY, currentSpeed);
+        star.update(currentSpeed, width, height);
+        star.draw(ctx, width, height, centerX, centerY, currentSpeed);
       });
 
       animationFrameId = requestAnimationFrame(animate);

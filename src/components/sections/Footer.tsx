@@ -1,6 +1,5 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import Card from '@/components/ui/Card';
 import { useEffect, useState } from 'react';
 import { LayoutGrid, Briefcase, DollarSign, Mail, MapPin, Zap } from 'lucide-react';

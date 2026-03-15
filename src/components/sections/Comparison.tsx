@@ -1,8 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { Check, Minus } from 'lucide-react';
-import { SPRING_WEIGHTED } from '@/lib/motion';
 
 interface ComparisonProps {
   sectionNumber?: string;
@@ -43,7 +41,7 @@ export default function Comparison({ sectionNumber = "04" }: ComparisonProps) {
   return (
     <section id="comparison" className="py-24 px-6 max-w-7xl mx-auto overflow-hidden">
       <div className="flex flex-col gap-4 mb-20">
-        <span className="text-[12px] font-medium tracking-[0.3em] text-muted uppercase">{sectionNumber} // FEATURE MATRIX</span>
+        <span className="text-[12px] font-medium tracking-[0.3em] text-muted uppercase">{sectionNumber}{' // FEATURE MATRIX'}</span>
         <h2 className="text-heading leading-tight">Compare <br /> System Tiers</h2>
       </div>
 
