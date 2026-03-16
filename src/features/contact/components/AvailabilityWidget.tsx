@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Card from '@/components/ui/Card';
-import { Clock, MapPin, Zap } from 'lucide-react';
+import { Clock, MapPin, Zap, Calendar } from 'lucide-react';
 
 export default function AvailabilityWidget() {
   const [time, setTime] = useState(new Date());
@@ -85,6 +85,16 @@ export default function AvailabilityWidget() {
           <div className="flex flex-col">
             <span className="text-[10px] font-bold tracking-widest text-muted uppercase">Response Time</span>
             <span className="text-lg font-medium">Under 12 Hours</span>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-4 group">
+          <div className="w-10 h-10 rounded-global bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all">
+            <Calendar className="w-4 h-4" />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-[10px] font-bold tracking-widest text-muted uppercase">Availability</span>
+            <span className="text-lg font-medium">Saturday & Sunday</span>
           </div>
         </div>
       </div>
