@@ -24,11 +24,11 @@ export default function ProjectCard({ date, title, desc, category, image, classN
           src={image} 
           alt={title}
           fill
-          className="object-contain object-right-bottom opacity-10 group-hover:opacity-100 transition-opacity duration-700"
+          className="object-contain object-right-bottom opacity-40 group-hover:opacity-100 transition-opacity duration-700"
           priority={title.includes('NextDNS')} // Priority load for the first project
         />
-        {/* Balanced Mask Layer */}
-        <div className="absolute inset-0 bg-gradient-to-tl from-transparent via-black/10 to-black/80 opacity-100 group-hover:opacity-30 transition-opacity duration-700" />
+{/* Balanced Mask Layer */}
+        <div className="absolute inset-0 bg-gradient-to-tl from-transparent via-transparent to-transparent opacity-0 group-hover:opacity-0 transition-opacity duration-700" />
       </div>
 
       <div className="relative z-10 flex flex-col h-full">
