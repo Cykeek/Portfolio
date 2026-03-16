@@ -20,16 +20,39 @@ export default function AvailabilityWidget() {
   });
 
   const hour = parseInt(time.toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata', hour: '2-digit', hour12: false }));
-  const isWorking = hour >= 9 && hour < 21;
+  const day = time.getDay(); // 0 = Sunday, 6 = Saturday
+
+  // Offline: 12:00 AM to 09:59 AM (all days)
+  // Available: Sunday(0) & Saturday(6) from 10:00 AM to 11:59 PM
+  // Busy: Monday(1) to Friday(5), 24 hours
+  let status: 'available' | 'busy' | 'offline';
+  
+  if (hour >= 0 && hour < 10) {
+    status = 'offline';
+  } else if (day === 0 || day === 6) {
+    // Weekend (Sunday = 0, Saturday = 6)
+    status = hour >= 10 ? 'available' : 'offline';
+  } else {
+    // Monday to Friday
+    status = 'busy';
+  }
+
+  const statusConfig = {
+    available: { color: 'bg-green-500', text: 'Available', pulse: true },
+    busy: { color: 'bg-yellow-500', text: 'Busy', pulse: false },
+    offline: { color: 'bg-red-500', text: 'Offline', pulse: false },
+  };
+
+  const currentStatus = statusConfig[status];
 
   return (
     <Card className="p-8 flex flex-col gap-8 h-full">
       <div className="flex items-center justify-between">
         <h3 className="text-xl font-bold tracking-tighter uppercase">Local Presence</h3>
         <div className="flex items-center gap-2 px-3 py-1 bg-white/5 border border-white/10 rounded-full">
-          <div className={`w-1.5 h-1.5 rounded-full ${isWorking ? 'bg-green-500 animate-pulse' : 'bg-yellow-500'}`} />
+          <div className={`w-1.5 h-1.5 rounded-full ${currentStatus.color} ${currentStatus.pulse ? 'animate-pulse' : ''}`} />
           <span className="text-[10px] font-bold tracking-widest uppercase text-muted">
-            {isWorking ? 'Online' : 'Away'}
+            {currentStatus.text}
           </span>
         </div>
       </div>
