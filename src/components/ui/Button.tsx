@@ -24,21 +24,21 @@ export default function Button({
   const isSecondary = variant === 'secondary';
   const isGhost = variant === 'ghost';
 
-  // Animation for the text and icons inside
+  // Faster animation for the text and icons inside
   const contentVariants: Variants = {
     initial: { x: 0 },
     hover: { 
       x: isGhost ? 4 : 0,
-      transition: SPRING_SNAPPY 
+      transition: { ...SPRING_SNAPPY, stiffness: 400, damping: 20 }
     }
   };
 
-  // Animation for the background fill
+  // Animation for the background fill - instant response
   const fillVariants: Variants = {
     initial: { x: '-101%' },
     hover: { 
       x: '0%',
-      transition: { ...SPRING_SNAPPY, bounce: 0 }
+      transition: { duration: 0.2, ease: 'easeOut' }
     }
   };
 
@@ -47,7 +47,7 @@ export default function Button({
     initial: { x: 0 },
     hover: { 
       x: 5,
-      transition: SPRING_SNAPPY
+      transition: { ...SPRING_SNAPPY, stiffness: 400, damping: 20 }
     }
   };
 
@@ -59,8 +59,8 @@ export default function Button({
       onClick={onClick}
       className={`
         group relative text-[13px] font-medium tracking-widest uppercase rounded-global flex items-center justify-center overflow-hidden
-        ${isPrimary ? 'px-10 py-4 bg-white text-black shadow-2xl shadow-white/10 hover:text-white transition-colors duration-300' : ''}
-        ${isSecondary ? 'px-8 py-4 text-white border border-white/10 hover:text-black transition-colors duration-300' : ''}
+        ${isPrimary ? 'px-10 py-4 bg-white text-black shadow-2xl shadow-white/10 hover:text-white' : ''}
+        ${isSecondary ? 'px-8 py-4 text-white border border-white/10 hover:text-black' : ''}
         ${isGhost ? 'px-0 py-2 text-muted hover:text-white' : ''}
         ${className}
       `}
@@ -69,7 +69,7 @@ export default function Button({
         hover: { scale: 1.02 },
         tap: { scale: 0.98 }
       }}
-      transition={SPRING_SNAPPY}
+      transition={{ duration: 0.15 }}
     >
       {/* Slide Fill for Primary (Black Fill) */}
       {isPrimary && (

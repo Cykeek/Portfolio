@@ -107,13 +107,19 @@ export default function GlobalBackground() {
     window.addEventListener('resize', handleResize);
     window.addEventListener('mousemove', handleMouseMove);
     
-    init();
-    animate();
+    // Delay intensive canvas work slightly to allow DOM to paint fully, improving LCP
+    const startTimeout = setTimeout(() => {
+      init();
+      animate();
+    }, 100); // 100ms is enough to let main thread paint
 
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
-      cancelAnimationFrame(animationFrameId);
+      clearTimeout(startTimeout);
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
     };
   }, [mouseX, mouseY, springX, springY]);
 
