@@ -89,10 +89,10 @@ export default function Footer() {
 
       {/* Deep Footer */}
       <div className="mt-20 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] font-medium tracking-[0.2em] text-muted opacity-30 uppercase">
-        <span>© 2024 SOUMAJIT DAS</span>
+        <span>© 2026 SOUMAJIT DAS</span>
         <div className="flex gap-10">
-          <a href="#" className="hover:text-white transition-colors">Privacy</a>
-          <a href="#" className="hover:text-white transition-colors">Terms</a>
+          <a href="/privacy" className="hover:text-white transition-colors">Privacy</a>
+          <a href="/terms" className="hover:text-white transition-colors">Terms</a>
         </div>
       </div>
     </footer>
