@@ -38,7 +38,7 @@ export default function Hero() {
         <p className="text-body max-w-2xl mb-12">
           Product Designer at{' '}
           <span className="inline-flex items-center px-4 py-1.5 bg-white text-black rounded-global transition-transform hover:scale-105 cursor-pointer align-middle mb-1">
-            <Image src="/Studio.svg" alt="Studio 1947" width={100} height={16} className="h-4 w-auto brightness-0" priority fetchPriority="high" />
+            <Image src="/Studio.svg" alt="Studio 1947" width={100} height={16} className="h-4 w-auto brightness-0" priority fetchPriority="high" sizes="100px" />
           </span>
           {' '}where I spend my time bridging the gap between complex engineering and design to build products that people actually love using.
         </p>

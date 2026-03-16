@@ -5,10 +5,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import { SPRING_WEIGHTED } from '@/lib/motion';
-import { CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, AlertCircle } from 'lucide-react';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 
-const HCAPTCHA_SITE_KEY = '50b2fe65-b00b-4b9e-ad62-3ba471098be2';
+const HCAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || '';
+
+interface FormErrors {
+  name?: string;
+  email?: string;
+  message?: string;
+}
 
 export default function ContactForm() {
   const [activeService, setActiveService] = useState<string | null>(null);
@@ -16,6 +22,8 @@ export default function ContactForm() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [hCaptchaToken, setHCaptchaToken] = useState<string | null>(null);
+  const [formErrors, setFormErrors] = useState<FormErrors>({});
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -29,11 +37,39 @@ export default function ContactForm() {
     "Custom Project"
   ];
 
+  const validateEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  const validateForm = (): boolean => {
+    const errors: FormErrors = {};
+    
+    if (!formData.name.trim()) {
+      errors.name = 'Name is required';
+    }
+    
+    if (!formData.email.trim()) {
+      errors.email = 'Email is required';
+    } else if (!validateEmail(formData.email)) {
+      errors.email = 'Please enter a valid email';
+    }
+    
+    if (!formData.message.trim()) {
+      errors.message = 'Message is required';
+    } else if (formData.message.trim().length < 10) {
+      errors.message = 'Message must be at least 10 characters';
+    }
+    
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (formErrors[name as keyof FormErrors]) {
+      setFormErrors(prev => ({ ...prev, [name]: undefined }));
+    }
   };
 
   const handleServiceSelect = (service: string) => {
@@ -43,6 +79,7 @@ export default function ContactForm() {
 
   const handleHCaptchaVerify = (token: string) => {
     setHCaptchaToken(token);
+    setSubmitError(null);
   };
 
   const handleHCaptchaExpire = () => {
@@ -51,32 +88,35 @@ export default function ContactForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitError(null);
     
     if (!activeService) {
       setServiceError(true);
       return;
     }
     
+    if (!validateForm()) {
+      return;
+    }
+    
     if (!hCaptchaToken) {
-      alert('Please complete the captcha verification.');
+      setSubmitError('Please complete the captcha verification.');
       return;
     }
     
     setIsLoading(true);
 
     try {
-      const response = await fetch('https://api.web3forms.com/submit', {
+      const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          access_key: process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY,
-          subject: `New Project Inquiry - ${activeService || 'General'}`,
-          from_name: formData.name,
+          name: formData.name,
           email: formData.email,
-          message: `${formData.message}\n\nService: ${activeService || 'Not specified'}`,
-          botcheck: '',
+          message: formData.message,
+          service: activeService,
           'h-captcha-response': hCaptchaToken,
         }),
       });
@@ -90,12 +130,10 @@ export default function ContactForm() {
         setHCaptchaToken(null);
         setServiceError(false);
       } else {
-        console.error('Web3Forms error:', data);
-        alert('Something went wrong. Please try again.');
+        setSubmitError(data.error || 'Something went wrong. Please try again.');
       }
     } catch (error) {
-      console.error('Form submission error:', error);
-      alert('Something went wrong. Please try again.');
+      setSubmitError('Network error. Please check your connection and try again.');
     } finally {
       setIsLoading(false);
     }
@@ -146,40 +184,67 @@ export default function ContactForm() {
               <div className="flex flex-col gap-3">
                 <label className="text-[10px] font-bold tracking-[0.3em] text-muted uppercase ml-1">Full Name</label>
                 <input 
-                  required
                   name="name"
                   type="text" 
                   placeholder="John Doe"
                   value={formData.name}
                   onChange={handleChange}
-                  className="bg-white/5 border border-white/10 rounded-sm px-6 py-4 text-sm focus:outline-none focus:border-white/30 transition-colors"
+                  className={`bg-white/5 border rounded-sm px-6 py-4 text-sm focus:outline-none transition-colors ${
+                    formErrors.name 
+                      ? 'border-red-500 focus:border-red-500' 
+                      : 'border-white/10 focus:border-white/30'
+                  }`}
                 />
+                {formErrors.name && (
+                  <span className="text-red-500 text-[10px] font-medium tracking-widest flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3" />
+                    {formErrors.name}
+                  </span>
+                )}
               </div>
               <div className="flex flex-col gap-3">
                 <label className="text-[10px] font-bold tracking-[0.3em] text-muted uppercase ml-1">Email Address</label>
                 <input 
-                  required
                   name="email"
                   type="email" 
                   placeholder="john@example.com"
                   value={formData.email}
                   onChange={handleChange}
-                  className="bg-white/5 border border-white/10 rounded-sm px-6 py-4 text-sm focus:outline-none focus:border-white/30 transition-colors"
+                  className={`bg-white/5 border rounded-sm px-6 py-4 text-sm focus:outline-none transition-colors ${
+                    formErrors.email 
+                      ? 'border-red-500 focus:border-red-500' 
+                      : 'border-white/10 focus:border-white/30'
+                  }`}
                 />
+                {formErrors.email && (
+                  <span className="text-red-500 text-[10px] font-medium tracking-widest flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3" />
+                    {formErrors.email}
+                  </span>
+                )}
               </div>
             </div>
 
             <div className="flex flex-col gap-3">
               <label className="text-[10px] font-bold tracking-[0.3em] text-muted uppercase ml-1">Project Details</label>
               <textarea 
-                required
                 name="message"
                 rows={4}
                 placeholder="Tell me about your vision..."
                 value={formData.message}
                 onChange={handleChange}
-                className="bg-white/5 border border-white/10 rounded-sm px-6 py-4 text-sm focus:outline-none focus:border-white/30 transition-colors resize-none"
+                className={`bg-white/5 border rounded-sm px-6 py-4 text-sm focus:outline-none transition-colors resize-none ${
+                  formErrors.message 
+                    ? 'border-red-500 focus:border-red-500' 
+                    : 'border-white/10 focus:border-white/30'
+                }`}
               />
+              {formErrors.message && (
+                <span className="text-red-500 text-[10px] font-medium tracking-widest flex items-center gap-1">
+                  <AlertCircle className="w-3 h-3" />
+                  {formErrors.message}
+                </span>
+              )}
             </div>
 
             <div className="flex justify-center md:justify-start w-full">
@@ -192,6 +257,17 @@ export default function ContactForm() {
                   onExpire={handleHCaptchaExpire}
                 />
               </div>
+            </div>
+
+            {submitError && (
+              <div className="flex items-center gap-2 p-4 bg-red-500/10 border border-red-500/20 rounded-sm">
+                <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
+                <span className="text-red-500 text-xs font-medium">{submitError}</span>
+              </div>
+            )}
+
+            <div className="flex items-center gap-2 text-[10px] text-muted/50">
+              <span className="tracking-wider">Rate limited to 5 messages per hour</span>
             </div>
 
             <Button 

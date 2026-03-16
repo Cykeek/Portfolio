@@ -20,12 +20,13 @@ export default function ProjectCard({ date, title, desc, category, image, classN
     <Card className={`group overflow-hidden ${className}`}>
       {/* Consistent High-End Image Container */}
       <div className={`absolute -bottom-10 -right-10 w-full h-[80%] z-0 pointer-events-none transition-opacity duration-700 ease-[0.33,1,0.68,1] ${title.includes('NextDNS') ? '-right-64' : ''}`}>
-        <Image 
+<Image 
           src={image} 
           alt={title}
           fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="object-contain object-right-bottom opacity-40 group-hover:opacity-100 transition-opacity duration-700"
-          priority={title.includes('NextDNS')} // Priority load for the first project
+          priority={title.includes('NextDNS')}
         />
 {/* Balanced Mask Layer */}
         <div className="absolute inset-0 bg-gradient-to-tl from-transparent via-transparent to-transparent opacity-0 group-hover:opacity-0 transition-opacity duration-700" />

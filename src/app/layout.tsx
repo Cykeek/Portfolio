@@ -5,6 +5,7 @@ import SmoothScroll from "@/components/layout/SmoothScroll";
 import GridOverlay from "@/components/layout/GridOverlay";
 import GlobalBackground from "@/components/layout/GlobalBackground";
 import PageTransition from "@/components/layout/PageTransition";
+import CookieConsent from "@/components/layout/CookieConsent";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 import Script from "next/script";
@@ -100,6 +101,7 @@ export default function RootLayout({
             {children}
           </PageTransition>
         </SmoothScroll>
+        <CookieConsent />
         <SpeedInsights />
         <Analytics />
       </body>
