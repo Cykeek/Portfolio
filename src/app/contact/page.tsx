@@ -35,13 +35,13 @@ export default function ContactPage() {
     <main className="min-h-screen selection:bg-white selection:text-black pt-20">
       <Navbar />
       
-      <section className="py-32 px-6 max-w-7xl mx-auto">
-        <div className="flex flex-col gap-4 mb-20">
+      <section className="py-20 md:py-32 px-6 max-w-7xl mx-auto">
+        <div className="flex flex-col gap-4 mb-12 md:mb-20">
           <span className="text-[12px] font-medium tracking-[0.3em] text-muted uppercase">05 // CONTACT</span>
           <h2 className="text-heading">Initiate <br /> Transmission</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16 md:mb-24">
           <ContactForm />
           
           <div className="flex flex-col gap-6">
