@@ -1,14 +1,9 @@
 'use client';
 
 import Navbar from '@/components/layout/Navbar';
-import Hero from '@/components/sections/Hero';
-import Work from '@/components/sections/Work';
-import Services from '@/components/sections/Services';
-import FAQ from '@/components/sections/FAQ';
-import Footer from '@/components/sections/Footer';
-import TechStack from '@/components/sections/TechStack';
-import Guarantees from '@/components/sections/Guarantees';
-import Roadmap from '@/components/sections/Roadmap';
+import Footer from '@/components/layout/Footer';
+import { Hero, Services } from '@/features/home';
+import { Work, TechStack, Guarantees, Roadmap, FAQ } from '@/features/shared';
 
 export default function Home() {
   return (

@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { STAGGER_CONTAINER, SPRING_WEIGHTED } from '@/lib/motion';
-import PricingCard from '@/components/ui/PricingCard';
+import PricingCard from './PricingCard';
 import Button from '@/components/ui/Button';
 
 interface PricingProps {

@@ -12,7 +12,7 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
-  --font-size-massive: clamp(2.1rem, 5.6vw, 4.55rem);
+  --font-size-massive: clamp(2.52rem, 6.7vw, 5.46rem);
   --font-size-heading: clamp(2.5rem, 5vw, 4.5rem);
   --font-size-body: clamp(1rem, 1.2vw, 1.125rem);
   --font-size-technical: clamp(0.7425rem, 1.1vw, 1.1rem);

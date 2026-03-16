@@ -17,22 +17,25 @@ export default function FAQ({ sectionNumber = "03" }: FAQProps) {
     'PROCESS': {
       icon: Activity,
       questions: [
-        { q: "How do I get started?", a: "Simply send me an email or click 'Wanna Chat?' to start a conversation about your project." },
-        { q: "How long does it take?", a: "Typically between 3 to 6 weeks depending on the complexity of the project." }
+        { q: "How do you bridge the gap between design and code?", a: "My workflow is integrated. I design with code constraints in mind and develop with design precision. This eliminates the 'translation gap' typically found between agencies, ensuring the final product is a 1:1 reflection of the design." },
+        { q: "How do we stay aligned during development?", a: "Transparency is fundamental. I use Slack for async communication and Linear for project tracking. You'll have access to a live staging environment from day one to see the product evolve in real-time." },
+        { q: "What is the typical project duration?", a: "Most engagements span 4 to 8 weeks. I prioritize deep work on a limited number of projects at a time to ensure every pixel and line of code receives the attention it deserves." }
       ]
     },
     'CAPABILITIES': {
       icon: Layers,
       questions: [
-        { q: "Do you build the websites too?", a: "Yes, I build fully responsive and high-performance websites using Framer and Next.js." },
-        { q: "Do you offer branding services?", a: "I focus primarily on digital product design, but I can assist with visual identity systems." }
+        { q: "Can you work within an existing tech stack?", a: "While I specialize in the Next.js and TypeScript ecosystem, I am experienced in integrating with existing React-based architectures or helping teams migrate to more performant, modern infrastructures." },
+        { q: "Do you build design systems or just one-off pages?", a: "I specialize in scalable design systems. I build accessible, documented component libraries that empower your team to build new features quickly while maintaining perfect visual consistency." },
+        { q: "How do you handle performance and SEO?", a: "Speed is a core design principle, not an afterthought. I optimize for Core Web Vitals, accessibility (a11y), and semantic SEO out of the box to ensure your product is fast and discoverable." }
       ]
     },
     'COMMERCIAL': {
       icon: BarChart3,
       questions: [
-        { q: "What is your pricing model?", a: "I offer project-based pricing tailored to the specific needs and goals of your product." },
-        { q: "Do you take monthly retainers?", a: "Yes, for established products needing ongoing design engineering support." }
+        { q: "What is your pricing philosophy?", a: "I operate on a fixed-price, project-based model. This provides you with budget certainty and shifts the focus from 'hours billed' to 'value delivered,' aligning our incentives toward the best possible outcome." },
+        { q: "Who owns the intellectual property?", a: "Upon final payment, you own 100% of the designs, code, and assets. I provide a clean handover with comprehensive documentation to ensure your team can operate independently." },
+        { q: "Do you offer ongoing support after launch?", a: "Yes. I offer maintenance retainers for performance monitoring, security updates, and iterative feature development to ensure your product continues to scale effectively after the initial launch." }
       ]
     }
   };

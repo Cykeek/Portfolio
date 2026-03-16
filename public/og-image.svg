@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0a0a0a"/>
+  <rect width="1200" height="630" fill="url(#grid)" opacity="0.1"/>
+  
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#333" stroke-width="0.5"/>
+    </pattern>
+  </defs>
+  
+  <text x="600" y="280" font-family="monospace" font-size="48" font-weight="bold" fill="#fff" text-anchor="middle" letter-spacing="0.1em">CYKEEK</text>
+  <text x="600" y="340" font-family="monospace" font-size="24" fill="#666" text-anchor="middle" letter-spacing="0.2em">DESIGN ENGINEERING</text>
+  
+  <text x="600" y="400" font-family="monospace" font-size="18" fill="#888" text-anchor="middle">Senior Web &amp; Product Designer</text>
+  
+  <circle cx="580" cy="450" r="6" fill="#22c55e"/>
+  <text x="600" y="454" font-family="monospace" font-size="14" fill="#22c55e" text-anchor="middle">AVAILABLE FOR NEW PROJECTS</text>
+  
+  <rect x="100" y="550" width="1000" height="1" fill="#222"/>
+  <text x="600" y="590" font-family="monospace" font-size="12" fill="#444" text-anchor="middle">cykeek.com</text>
+</svg>

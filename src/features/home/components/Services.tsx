@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import ServiceItem from '@/components/ui/ServiceItem';
+import ServiceItem from './ServiceItem';
 import { STAGGER_CONTAINER, SPRING_WEIGHTED } from '@/lib/motion';
 
 /**
@@ -102,13 +102,13 @@ export default function Services({ sectionNumber = "01" }: ServicesProps) {
     {
       title: "UI/UX DESIGN",
       desc: "Crafting intuitive, high-fidelity interfaces for mobile and desktop platforms.",
-      tools: ["FIGMA", "ADOBE CC", "PROTOTYPING"],
+      tools: ["WIREFRAMING", "RESEARCH", "PLANNING", "DESIGNING", "HANDOFF"],
       illustration: <UIUXIllustration />
     },
     {
       title: "WEB ENGINEERING",
       desc: "Building responsive, performance-first websites with modern tech stacks.",
-      tools: ["FRAMER", "NEXT.JS", "TAILWIND"],
+      tools: ["DEVELOPMENT", "ANIMATIONS", "CMS SETUP", "SEO", "OPTIMIZATION"],
       illustration: <EngineeringIllustration />
     }
   ];

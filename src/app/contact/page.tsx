@@ -2,10 +2,9 @@
 
 import { motion } from 'framer-motion';
 import Navbar from '@/components/layout/Navbar';
-import Footer from '@/components/sections/Footer';
+import Footer from '@/components/layout/Footer';
 import Card from '@/components/ui/Card';
-import ContactForm from '@/components/sections/ContactForm';
-import AvailabilityWidget from '@/components/sections/AvailabilityWidget';
+import { ContactForm, AvailabilityWidget } from '@/features/contact';
 import { MessageSquare, Calendar, Sparkles } from 'lucide-react';
 import { GitHub } from '@/components/ui/icons/GitHub';
 import { Instagram } from '@/components/ui/icons/Instagram';

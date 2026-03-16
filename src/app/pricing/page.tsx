@@ -1,20 +1,17 @@
 'use client';
 
 import Navbar from '@/components/layout/Navbar';
-import Pricing from '@/components/sections/Pricing';
-import Guarantees from '@/components/sections/Guarantees';
-import Comparison from '@/components/sections/Comparison';
-import TechStack from '@/components/sections/TechStack';
-import Roadmap from '@/components/sections/Roadmap';
-import FAQ from '@/components/sections/FAQ';
-import Footer from '@/components/sections/Footer';
+import Footer from '@/components/layout/Footer';
+import { PricingSection } from '@/features/pricing';
+import { Comparison } from '@/features/pricing';
+import { TechStack, Guarantees, Roadmap, FAQ } from '@/features/shared';
 
 export default function PricingPage() {
   return (
     <main className="min-h-screen selection:bg-white selection:text-black pt-20">
       <Navbar />
       
-      <Pricing sectionNumber="03" />
+      <PricingSection sectionNumber="03" />
 
       <Guarantees sectionNumber="04" />
 

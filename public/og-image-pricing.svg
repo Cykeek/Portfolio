@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0a0a0a"/>
+  <rect width="1200" height="630" fill="url(#grid)" opacity="0.1"/>
+  
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#333" stroke-width="0.5"/>
+    </pattern>
+  </defs>
+  
+  <text x="600" y="260" font-family="monospace" font-size="48" font-weight="bold" fill="#fff" text-anchor="middle" letter-spacing="0.1em">PRICING</text>
+  <text x="600" y="320" font-family="monospace" font-size="24" fill="#666" text-anchor="middle" letter-spacing="0.2em">TRANSPARENT RATES</text>
+  
+  <text x="600" y="380" font-family="monospace" font-size="18" fill="#888" text-anchor="middle">Fixed-price packages for web design</text>
+  <text x="600" y="410" font-family="monospace" font-size="18" fill="#888" text-anchor="middle">UI/UX, and product development</text>
+  
+  <rect x="450" y="460" width="300" height="40" rx="4" fill="#22c55e"/>
+  <text x="600" y="486" font-family="monospace" font-size="16" fill="#000" text-anchor="middle" font-weight="bold">VIEW PRICING</text>
+  
+  <rect x="100" y="550" width="1000" height="1" fill="#222"/>
+  <text x="600" y="590" font-family="monospace" font-size="12" fill="#444" text-anchor="middle">cykeek.com/pricing</text>
+</svg>

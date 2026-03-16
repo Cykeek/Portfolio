@@ -12,19 +12,22 @@ export default function Work({ sectionNumber = "01" }: WorkProps) {
       date: "2024",
       category: "UI REDESIGN",
       title: "NextDNS: SECURE UI",
-      desc: "Transforming complex network security into a minimal and intuitive experience."
+      desc: "Transforming complex network security into a minimal and intuitive experience.",
+      image: "/projects/nextdns.png"
     },
     {
       date: "2024",
       category: "FINTECH",
       title: "Indipay Mobile",
-      desc: "Reimagining traditional finance as a social and engaging platform."
+      desc: "Reimagining traditional finance as a social and engaging platform.",
+      image: "/projects/Indipay.png"
     },
     {
       date: "2023",
       category: "UTILITY",
       title: "CESC App",
-      desc: "Modernizing traditional utility services for a digital-first world."
+      desc: "Modernizing traditional utility services for a digital-first world.",
+      image: "/projects/cesc.png"
     }
   ];
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { useMotionValue, useSpring, useScroll, useTransform } from 'framer-motion';
+import { useMotionValue, useSpring } from 'framer-motion';
 
 class Star {
   x: number;
@@ -51,13 +51,9 @@ export default function GlobalBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-
-  // Scroll tracking
-  const { scrollYProgress } = useScroll();
   
-  // Map scroll progress (0 to 1) to star velocity (2 to 20)
-  // As you reach the bottom, the speed increases dramatically
-  const starVelocity = useTransform(scrollYProgress, [0, 1], [2, 20]);
+  // Fixed slower speed - no scroll-based velocity
+  const baseSpeed = 1.5;
   
   // Smooth mouse follow
   const springX = useSpring(mouseX, { stiffness: 50, damping: 20 });
@@ -71,7 +67,7 @@ export default function GlobalBackground() {
 
     let animationFrameId: number;
     let stars: Star[] = [];
-    const starCount = 200; // Increased count for better warp feel
+    const starCount = 200;
     let width = window.innerWidth;
     let height = window.innerHeight;
 
@@ -84,9 +80,8 @@ export default function GlobalBackground() {
     };
 
     const animate = () => {
-      // Trail fade - adjusted for speed
-      const currentSpeed = starVelocity.get();
-      ctx.fillStyle = `rgba(5, 5, 5, ${Math.max(0.1, 0.3 - currentSpeed / 100)})`; 
+      // Trail fade - slower speed
+      ctx.fillStyle = 'rgba(5, 5, 5, 0.25)'; 
       ctx.fillRect(0, 0, width, height);
 
       const mX = (springX.get() / width - 0.5) * 150;
@@ -96,8 +91,8 @@ export default function GlobalBackground() {
       const centerY = height / 2 + mY;
 
       stars.forEach(star => {
-        star.update(currentSpeed, width, height);
-        star.draw(ctx, width, height, centerX, centerY, currentSpeed);
+        star.update(baseSpeed, width, height);
+        star.draw(ctx, width, height, centerX, centerY, baseSpeed);
       });
 
       animationFrameId = requestAnimationFrame(animate);
@@ -120,7 +115,7 @@ export default function GlobalBackground() {
       window.removeEventListener('mousemove', handleMouseMove);
       cancelAnimationFrame(animationFrameId);
     };
-  }, [mouseX, mouseY, springX, springY, starVelocity]);
+  }, [mouseX, mouseY, springX, springY]);
 
   return (
     <div className="fixed inset-0 z-[-1] overflow-hidden bg-[#050505] pointer-events-none">
