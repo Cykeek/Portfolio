@@ -1,27 +1,129 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { SPRING_WEIGHTED } from '@/lib/motion';
+import { useRazorpay } from '@/hooks/useRazorpay';
+import PrePaymentModal from './PrePaymentModal';
 
 interface PricingCardProps {
   title: string;
   price: string;
+  amount: number;
   description: string;
   features: string[];
   isPopular?: boolean;
   ctaText?: string;
 }
 
+interface FormData {
+  name: string;
+  email: string;
+  message: string;
+}
+
 export default function PricingCard({
   title,
   price,
+  amount,
   description,
   features,
   isPopular = false,
   ctaText = "Get Started"
 }: PricingCardProps) {
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const { openCheckout, onDismiss } = useRazorpay();
+
+  const upfrontAmount = Math.round(amount * 0.5);
+
+  const handleProceedToPayment = async (
+    formData: FormData,
+    onPaymentSuccess: () => void,
+    onPaymentError: () => void,
+    onPaymentCancel: () => void
+  ) => {
+    if (isProcessing) return;
+    
+    setIsProcessing(true);
+
+    onDismiss(() => {
+      setIsProcessing(false);
+      onPaymentCancel();
+    });
+
+    try {
+      const orderResponse = await fetch('/api/razorpay/order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          planName: title,
+          isPartialPayment: true,
+        }),
+      });
+
+      const orderData = await orderResponse.json();
+
+      if (!orderResponse.ok || orderData.error) {
+        throw new Error(orderData.error || 'Failed to create order');
+      }
+
+      await openCheckout({
+        key: orderData.keyId,
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: 'Cykeek Design',
+        description: `${title} - 50% Upfront (₹${orderData.amountInRs.toLocaleString()})`,
+        order_id: orderData.orderId,
+        theme: {
+          color: '#ffffff',
+        },
+        handler: async (response) => {
+          const verifyResponse = await fetch('/api/razorpay/verify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            }),
+          });
+
+          const verifyData = await verifyResponse.json();
+          
+          if (verifyResponse.ok && verifyData.verified) {
+            await fetch('/api/payment-notify', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                name: formData.name,
+                email: formData.email,
+                message: formData.message,
+                service: title,
+                paymentId: response.razorpay_payment_id,
+                amount: orderData.amountInRs,
+              }),
+            });
+            onPaymentSuccess();
+          } else {
+            onPaymentError();
+          }
+        },
+      });
+    } catch (error) {
+      console.error('Payment error:', error);
+      onPaymentError();
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleButtonClick = () => {
+    setShowModal(true);
+  };
+
   return (
     <motion.div
       variants={{
@@ -62,9 +164,19 @@ export default function PricingCard({
         variant={isPopular ? "primary" : "secondary"} 
         className="w-full justify-center"
         icon="arrow"
+        onClick={handleButtonClick}
       >
         {ctaText}
       </Button>
+
+      <PrePaymentModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        onConfirm={handleProceedToPayment}
+        planName={title}
+        totalAmount={amount}
+        upfrontAmount={upfrontAmount}
+      />
     </motion.div>
   );
 }

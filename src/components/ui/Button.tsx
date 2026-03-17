@@ -10,6 +10,7 @@ interface ButtonProps {
   icon?: 'arrow' | 'chevron';
   className?: string;
   onClick?: () => void;
+  disabled?: boolean;
 }
 
 export default function Button({ 
@@ -17,7 +18,8 @@ export default function Button({
   variant = 'primary', 
   icon, 
   className = '', 
-  onClick 
+  onClick,
+  disabled = false
 }: ButtonProps) {
   
   const isPrimary = variant === 'primary';
@@ -54,25 +56,28 @@ export default function Button({
   return (
     <motion.button
       initial="initial"
-      whileHover="hover"
-      whileTap="tap"
-      onClick={onClick}
+      whileHover={disabled ? "disabled" : "hover"}
+      whileTap={disabled ? "disabled" : "tap"}
+      onClick={disabled ? undefined : onClick}
+      disabled={disabled}
       className={`
         group relative text-[13px] font-medium tracking-widest uppercase rounded-global flex items-center justify-center overflow-hidden
-        ${isPrimary ? 'px-10 py-4 bg-white text-black shadow-2xl shadow-white/10 hover:text-white' : ''}
-        ${isSecondary ? 'px-8 py-4 text-white border border-white/10 hover:text-black' : ''}
-        ${isGhost ? 'px-0 py-2 text-muted hover:text-white' : ''}
+        ${isPrimary ? `px-10 py-4 bg-white text-black shadow-2xl shadow-white/10 ${!disabled ? 'hover:text-white' : ''}` : ''}
+        ${isSecondary ? `px-8 py-4 text-white border border-white/10 ${!disabled ? 'hover:text-black' : ''}` : ''}
+        ${isGhost ? `px-0 py-2 text-muted ${!disabled ? 'hover:text-white' : ''}` : ''}
+        ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
         ${className}
       `}
       variants={{
         initial: { scale: 1 },
         hover: { scale: 1.02 },
-        tap: { scale: 0.98 }
+        tap: { scale: 0.98 },
+        disabled: { scale: 1 }
       }}
       transition={{ duration: 0.15 }}
     >
       {/* Slide Fill for Primary (Black Fill) */}
-      {isPrimary && (
+      {isPrimary && !disabled && (
         <motion.div
           className="absolute inset-0 bg-black z-0 rounded-global"
           variants={fillVariants}
@@ -80,7 +85,7 @@ export default function Button({
       )}
 
       {/* Slide Fill for Secondary (White Fill) */}
-      {isSecondary && (
+      {isSecondary && !disabled && (
         <motion.div
           className="absolute inset-0 bg-white z-0 rounded-global"
           variants={fillVariants}
@@ -88,20 +93,20 @@ export default function Button({
       )}
 
       <motion.span 
-        variants={contentVariants}
+        variants={disabled ? undefined : contentVariants}
         className="relative z-10 flex items-center gap-3"
       >
         {children}
         
         {/* Animated Icons */}
         {icon === 'arrow' && (
-          <motion.div variants={arrowVariants}>
+          <motion.div variants={disabled ? undefined : arrowVariants}>
             <ArrowRight className="w-4 h-4" />
           </motion.div>
         )}
         
         {icon === 'chevron' && (
-          <motion.div variants={{ hover: { x: 4 } }}>
+          <motion.div variants={disabled ? undefined : { hover: { x: 4 } }}>
             <ChevronRight className={`w-4 h-4 transition-transform ${isGhost ? 'opacity-100' : 'opacity-50'}`} />
           </motion.div>
         )}

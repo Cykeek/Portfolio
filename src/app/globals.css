@@ -112,3 +112,12 @@ body {
   -webkit-text-stroke: 1px var(--color-foreground);
   color: transparent;
 }
+
+/* Modal scroll lock */
+html.modal-open {
+  overflow: hidden !important;
+}
+
+html.modal-open body {
+  overflow: hidden !important;
+}

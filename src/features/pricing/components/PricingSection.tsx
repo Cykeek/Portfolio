@@ -17,6 +17,7 @@ export default function Pricing({ sectionNumber = "03" }: PricingProps) {
     {
       title: "Brand Setup",
       price: "₹4,999",
+      amount: 4999,
       description: "Establish a professional visual identity with a custom logo and comprehensive brand guidelines.",
       features: [
         "Logo & Brand Guideline Documentation",
@@ -30,6 +31,7 @@ export default function Pricing({ sectionNumber = "03" }: PricingProps) {
     {
       title: "Startup Plan",
       price: "₹14,999",
+      amount: 14999,
       description: "A comprehensive design solution for early-stage startups needing a complete digital presence.",
       features: [
         "Logo & Brand Guideline Documentation",
@@ -46,6 +48,7 @@ export default function Pricing({ sectionNumber = "03" }: PricingProps) {
     {
       title: "Growth Plan",
       price: "₹49,999",
+      amount: 49999,
       description: "The ultimate scale-up solution with full-stack development, expanded content, and priority support.",
       features: [
         "Everything under Startup Plan",
