@@ -2,7 +2,6 @@
 
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
 import { SPRING_WEIGHTED } from '@/lib/motion';
-import Button from '@/components/ui/Button';
 import { DollarSign, Mail } from 'lucide-react';
 import { useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -74,7 +73,7 @@ const handleLogoClick = (e: React.MouseEvent) => {
 
   return (
     <>
-      {/* Desktop Top Navbar */}
+{/* Desktop Top Navbar */}
       <div className="fixed top-0 left-0 w-full z-50 hidden md:flex justify-between items-start px-12 py-8 pointer-events-none">
         <motion.a 
           href="/"
@@ -88,13 +87,13 @@ const handleLogoClick = (e: React.MouseEvent) => {
           <span className="text-[12px] font-medium tracking-[0.2em] uppercase text-white">CYKEEK</span>
         </motion.a>
 
-        {/* Absolutely centered nav pill */}
+        {/* Nav pill - right aligned */}
         <motion.nav 
           variants={islandVariants}
           initial="initial"
           animate="animate"
           transition={{ ...SPRING_WEIGHTED, delay: 0.1 }}
-          className="pointer-events-auto absolute left-1/2 top-8 -translate-x-1/2 bg-white/[0.03] backdrop-blur-md border border-white/10 rounded-global px-2 py-2 shadow-xl flex items-center gap-2"
+          className="pointer-events-auto bg-white/[0.03] backdrop-blur-md border border-white/10 rounded-global px-2 py-2 shadow-xl flex items-center gap-2"
         >
           {navItems.map((item) => (
             <a
@@ -114,21 +113,9 @@ const handleLogoClick = (e: React.MouseEvent) => {
             </a>
           ))}
         </motion.nav>
-
-        <motion.div
-          variants={islandVariants}
-          initial="initial"
-          animate="animate"
-          transition={{ ...SPRING_WEIGHTED, delay: 0.2 }}
-          className="pointer-events-auto"
-        >
-<Button variant="primary" className="!px-8 !py-3" onClick={() => router.push('/contact', { scroll: false })}>
-            WANNA CHAT?
-          </Button>
-        </motion.div>
       </div>
 
-      {/* Mobile Top Header */}
+{/* Mobile Top Header */}
       <div className="fixed top-0 left-0 w-full z-50 md:hidden flex justify-between items-center px-6 py-6 pointer-events-none">
         <motion.a 
           href="/"
@@ -139,17 +126,6 @@ const handleLogoClick = (e: React.MouseEvent) => {
         >
           <span className="text-[11px] font-medium tracking-[0.2em] uppercase text-white">CYKEEK</span>
         </motion.a>
-        
-        <motion.div
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.1 }}
-          className="pointer-events-auto"
-        >
-          <Button variant="primary" className="!px-6 !py-2.5 !text-[10px]" onClick={() => router.push('/contact', { scroll: false })}>
-            CHAT
-          </Button>
-        </motion.div>
       </div>
 
       {/* Mobile Bottom Dock */}
