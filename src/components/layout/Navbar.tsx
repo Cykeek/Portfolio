@@ -45,7 +45,7 @@ export default function Navbar() {
     });
   });
 
-  const handleLogoClick = (e: React.MouseEvent) => {
+const handleLogoClick = (e: React.MouseEvent) => {
     e.preventDefault();
     if (pathname === '/') {
       if (lenis) {
@@ -55,7 +55,7 @@ export default function Navbar() {
       }
       setScrollActiveItem(null);
     } else {
-      router.push('/');
+      router.push('/', { scroll: false });
     }
   };
 
@@ -122,7 +122,7 @@ export default function Navbar() {
           transition={{ ...SPRING_WEIGHTED, delay: 0.2 }}
           className="pointer-events-auto"
         >
-          <Button variant="primary" className="!px-8 !py-3" onClick={() => router.push('/contact')}>
+<Button variant="primary" className="!px-8 !py-3" onClick={() => router.push('/contact', { scroll: false })}>
             WANNA CHAT?
           </Button>
         </motion.div>
@@ -146,7 +146,7 @@ export default function Navbar() {
           transition={{ delay: 0.1 }}
           className="pointer-events-auto"
         >
-          <Button variant="primary" className="!px-6 !py-2.5 !text-[10px]" onClick={() => router.push('/contact')}>
+          <Button variant="primary" className="!px-6 !py-2.5 !text-[10px]" onClick={() => router.push('/contact', { scroll: false })}>
             CHAT
           </Button>
         </motion.div>

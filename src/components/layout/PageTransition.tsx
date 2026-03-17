@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useRef, useEffect } from 'react';
 
@@ -10,22 +10,22 @@ export default function PageTransition({ children }: { children: React.ReactNode
 
   useEffect(() => {
     isFirstMount.current = false;
-  }, []);
+    
+    // Smooth scroll to top on route change
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [pathname]);
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={pathname}
-        initial={isFirstMount.current ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -10 }}
-        transition={{ 
-          duration: 0.4, 
-          ease: [0.33, 1, 0.68, 1] 
-        }}
-      >
-        {children}
-      </motion.div>
-    </AnimatePresence>
+    <motion.div
+      key={pathname}
+      initial={isFirstMount.current ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ 
+        duration: 0.4, 
+        ease: [0.33, 1, 0.68, 1] 
+      }}
+    >
+      {children}
+    </motion.div>
   );
 }

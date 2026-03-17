@@ -4,12 +4,15 @@ import { motion } from 'framer-motion';
 import { STAGGER_CONTAINER, SPRING_WEIGHTED } from '@/lib/motion';
 import PricingCard from './PricingCard';
 import Button from '@/components/ui/Button';
+import { useRouter } from 'next/navigation';
 
 interface PricingProps {
   sectionNumber?: string;
 }
 
 export default function Pricing({ sectionNumber = "03" }: PricingProps) {
+  const router = useRouter();
+
   const plans = [
     {
       title: "Brand Setup",
@@ -97,7 +100,7 @@ export default function Pricing({ sectionNumber = "03" }: PricingProps) {
         <Button 
           variant="primary" 
           className="whitespace-nowrap !px-12"
-          onClick={() => window.location.href = '/contact'}
+          onClick={() => router.push('/contact', { scroll: false })}
           icon="arrow"
         >
           Get Custom Quote

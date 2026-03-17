@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import PricingPage from "./page";
 
 export const metadata: Metadata = {
   title: "Pricing | Transparent Design Engineering Rates",
@@ -24,6 +23,10 @@ export const metadata: Metadata = {
   },
 };
 
-export default function PricingLayout() {
-  return <PricingPage />;
+export default function PricingLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return children;
 }

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import HomePage from "./page";
 
 export const metadata: Metadata = {
   title: "Cykeek | Design Engineering for Global Brands",
@@ -20,10 +19,14 @@ export const metadata: Metadata = {
   twitter: {
     title: "Cykeek | Design Engineering for Global Brands",
     description: "Senior Web & Product Designer Portfolio",
-    images: ["https://cykeek.com/og-image.svg"],
+    images: ["/og-image.svg"],
   },
 };
 
-export default function HomeLayout() {
-  return <HomePage />;
+export default function HomeLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return children;
 }

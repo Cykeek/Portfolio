@@ -63,10 +63,10 @@ export default function Hero() {
             </Button>
           </motion.div>
           
-          <motion.div variants={STAGGER_CONTAINER()}>
+<motion.div variants={STAGGER_CONTAINER()}>
             <Button 
               variant="secondary"
-              onClick={() => window.location.href = '/pricing'}
+              onClick={() => router.push('/pricing', { scroll: false })}
             >
               View Pricing
             </Button>
