@@ -9,6 +9,8 @@ import { CheckCircle2, AlertCircle } from 'lucide-react';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 
 const HCAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || '';
+const WEB3FORMS_ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || '';
+const WEB3FORMS_SUBMIT_URL = 'https://api.web3forms.com/submit';
 
 interface FormErrors {
   name?: string;
@@ -103,25 +105,41 @@ export default function ContactForm() {
       setSubmitError('Please complete the captcha verification.');
       return;
     }
+
+    if (!WEB3FORMS_ACCESS_KEY) {
+      setSubmitError('Contact form is not configured (missing Web3Forms key).');
+      return;
+    }
     
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/contact', {
+      // Web3Forms requires browser-side submission unless you use Pro + server IP allowlist.
+      const response = await fetch(WEB3FORMS_SUBMIT_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Accept: 'application/json',
         },
         body: JSON.stringify({
-          name: formData.name,
+          access_key: WEB3FORMS_ACCESS_KEY,
+          subject: `New Project Inquiry - ${activeService}`,
+          from_name: formData.name,
           email: formData.email,
-          message: formData.message,
-          service: activeService,
+          message: `${formData.message}\n\nService: ${activeService}`,
+          botcheck: '',
           'h-captcha-response': hCaptchaToken,
         }),
       });
 
-      const data = await response.json();
+      const raw = await response.text();
+      let data: { success?: boolean; message?: string; body?: { message?: string }; error?: string };
+      try {
+        data = JSON.parse(raw) as typeof data;
+      } catch {
+        setSubmitError('The email service returned an unexpected response. Please try again.');
+        return;
+      }
 
       if (data.success) {
         setIsSubmitted(true);
@@ -130,9 +148,14 @@ export default function ContactForm() {
         setHCaptchaToken(null);
         setServiceError(false);
       } else {
-        setSubmitError(data.error || 'Something went wrong. Please try again.');
+        const msg =
+          data.message ||
+          data.body?.message ||
+          data.error ||
+          'Something went wrong. Please try again.';
+        setSubmitError(msg);
       }
-    } catch (error) {
+    } catch {
       setSubmitError('Network error. Please check your connection and try again.');
     } finally {
       setIsLoading(false);
