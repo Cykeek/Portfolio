@@ -13,14 +13,24 @@ interface ProjectCardProps {
   category: string;
   image: string;
   className?: string;
+  redirectUrl?: string;
 }
 
-export default function ProjectCard({ date, title, desc, category, image, className = '' }: ProjectCardProps) {
-  return (
-    <Card className={`group overflow-hidden ${className}`}>
+const isValidUrl = (url: string): boolean => {
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+  } catch {
+    return false;
+  }
+};
+
+export default function ProjectCard({ date, title, desc, category, image, className = '', redirectUrl }: ProjectCardProps) {
+  const CardContent = () => (
+    <>
       {/* Consistent High-End Image Container */}
       <div className={`absolute -bottom-10 -right-10 w-full h-[80%] z-0 pointer-events-none transition-opacity duration-700 ease-[0.33,1,0.68,1] ${title.includes('NextDNS') ? '-right-64' : ''}`}>
-<Image 
+        <Image 
           src={image} 
           alt={title}
           fill
@@ -29,7 +39,7 @@ export default function ProjectCard({ date, title, desc, category, image, classN
           priority={title.includes('NextDNS')}
           loading={title.includes('NextDNS') ? undefined : 'lazy'}
         />
-{/* Balanced Mask Layer */}
+        {/* Balanced Mask Layer */}
         <div className="absolute inset-0 bg-gradient-to-tl from-transparent via-transparent to-transparent opacity-0 group-hover:opacity-0 transition-opacity duration-700" />
       </div>
 
@@ -71,6 +81,24 @@ export default function ProjectCard({ date, title, desc, category, image, classN
           </div>
         </div>
       </div>
+    </>
+  );
+
+  const shouldRedirect = redirectUrl && isValidUrl(redirectUrl);
+
+  if (shouldRedirect) {
+    return (
+      <Card className={`group overflow-hidden ${className}`}>
+        <a href={redirectUrl} target="_blank" rel="noopener noreferrer" className="block h-full">
+          <CardContent />
+        </a>
+      </Card>
+    );
+  }
+
+  return (
+    <Card className={`group overflow-hidden ${className}`}>
+      <CardContent />
     </Card>
   );
 }
