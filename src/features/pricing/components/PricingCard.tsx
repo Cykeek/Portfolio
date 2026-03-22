@@ -1,12 +1,18 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { SPRING_WEIGHTED } from '@/lib/motion';
 import { useRazorpay } from '@/hooks/useRazorpay';
-import PrePaymentModal from './PrePaymentModal';
+
+// Lazy load the modal to reduce initial bundle size
+// Fallback to empty component if module fails to load
+const EmptyModal = () => null;
+const PrePaymentModal = lazy(() => 
+  import('./PrePaymentModal').then((module) => ({ default: module.default || EmptyModal }))
+);
 
 const WEB3FORMS_ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || '';
 const WEB3FORMS_SUBMIT_URL = 'https://api.web3forms.com/submit';
@@ -212,14 +218,18 @@ export default function PricingCard({
         {ctaText}
       </Button>
 
-      <PrePaymentModal
-        isOpen={showModal}
-        onClose={() => setShowModal(false)}
-        onConfirm={handleProceedToPayment}
-        planName={title}
-        totalAmount={amount}
-        upfrontAmount={upfrontAmount}
-      />
+      {showModal && (
+        <Suspense fallback={null}>
+          <PrePaymentModal
+            isOpen={showModal}
+            onClose={() => setShowModal(false)}
+            onConfirm={handleProceedToPayment}
+            planName={title}
+            totalAmount={amount}
+            upfrontAmount={upfrontAmount}
+          />
+        </Suspense>
+      )}
     </motion.div>
   );
 }

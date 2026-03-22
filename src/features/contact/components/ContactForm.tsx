@@ -1,12 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import { SPRING_WEIGHTED } from '@/lib/motion';
-import { CheckCircle2, AlertCircle } from 'lucide-react';
-import HCaptcha from '@hcaptcha/react-hcaptcha';
+import { CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+
+// Lazy load hCaptcha to reduce initial bundle size
+const HCaptcha = lazy(() => import('@hcaptcha/react-hcaptcha'));
 
 const HCAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_HCAPTCHA_SITE_KEY || '';
 const WEB3FORMS_ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || '';
@@ -272,13 +274,19 @@ export default function ContactForm() {
 
             <div className="flex justify-center md:justify-start w-full">
               <div className="transform scale-[0.85] sm:scale-100 origin-center md:origin-left">
-                <HCaptcha
-                  sitekey={HCAPTCHA_SITE_KEY}
-                  theme="dark"
-                  reCaptchaCompat={false}
-                  onVerify={handleHCaptchaVerify}
-                  onExpire={handleHCaptchaExpire}
-                />
+                <Suspense fallback={
+                  <div className="flex items-center justify-center w-[300px] h-[80px] bg-white/5 rounded-md">
+                    <Loader2 className="w-6 h-6 animate-spin text-muted" />
+                  </div>
+                }>
+                  <HCaptcha
+                    sitekey={HCAPTCHA_SITE_KEY}
+                    theme="dark"
+                    reCaptchaCompat={false}
+                    onVerify={handleHCaptchaVerify}
+                    onExpire={handleHCaptchaExpire}
+                  />
+                </Suspense>
               </div>
             </div>
 
