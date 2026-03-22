@@ -11,6 +11,17 @@ const nextConfig: NextConfig = {
     ],
   },
   async headers() {
+    const isDev = process.env.NODE_ENV === 'development';
+    const scriptSrc = [
+      "'self'",
+      ...(isDev ? ["'unsafe-eval'"] : []),
+      "'unsafe-inline'",
+      'https://js.hs-scripts.com',
+      'https://hcaptcha.com',
+      'https://*.hcaptcha.com',
+      'https://checkout.razorpay.com',
+    ].join(' ');
+
     return [
       {
         source: '/(.*)',
@@ -19,7 +30,7 @@ const nextConfig: NextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://js.hs-scripts.com https://hcaptcha.com https://*.hcaptcha.com https://checkout.razorpay.com",
+              `script-src ${scriptSrc}`,
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' data: https: blob:",

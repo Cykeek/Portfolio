@@ -8,6 +8,45 @@ import { SPRING_WEIGHTED } from '@/lib/motion';
 import { useRazorpay } from '@/hooks/useRazorpay';
 import PrePaymentModal from './PrePaymentModal';
 
+const WEB3FORMS_ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || '';
+const WEB3FORMS_SUBMIT_URL = 'https://api.web3forms.com/submit';
+
+async function notifyPaymentEmail(params: {
+  title: string;
+  formData: LeadFormData;
+  amountInRs: number;
+  paymentId: string;
+}): Promise<void> {
+  if (!WEB3FORMS_ACCESS_KEY) return;
+
+  const { title, formData, amountInRs, paymentId } = params;
+  const response = await fetch(WEB3FORMS_SUBMIT_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    body: JSON.stringify({
+      access_key: WEB3FORMS_ACCESS_KEY,
+      subject: `💰 Payment Received - ${title} - ₹${amountInRs}`,
+      from_name: formData.name,
+      email: formData.email,
+      message: `${formData.message}\n\n---\nService: ${title}\nAmount Paid: ₹${amountInRs}\nPayment ID: ${paymentId}\nStatus: Payment Successful`,
+      botcheck: '',
+    }),
+  });
+
+  const raw = await response.text();
+  try {
+    const data = JSON.parse(raw) as { success?: boolean; message?: string };
+    if (!data.success) {
+      console.error('Web3Forms payment notify:', data.message || raw.slice(0, 200));
+    }
+  } catch {
+    console.error('Web3Forms payment notify: non-JSON response', response.status);
+  }
+}
+
 interface PricingCardProps {
   title: string;
   price: string;
@@ -18,7 +57,7 @@ interface PricingCardProps {
   ctaText?: string;
 }
 
-interface FormData {
+interface LeadFormData {
   name: string;
   email: string;
   message: string;
@@ -40,7 +79,7 @@ export default function PricingCard({
   const upfrontAmount = Math.round(amount * 0.5);
 
   const handleProceedToPayment = async (
-    formData: FormData,
+    formData: LeadFormData,
     onPaymentSuccess: () => void,
     onPaymentError: () => void,
     onPaymentCancel: () => void
@@ -91,21 +130,25 @@ export default function PricingCard({
             }),
           });
 
-          const verifyData = await verifyResponse.json();
-          
+          let verifyData: { verified?: boolean; error?: string };
+          try {
+            verifyData = (await verifyResponse.json()) as typeof verifyData;
+          } catch {
+            onPaymentError();
+            return;
+          }
+
           if (verifyResponse.ok && verifyData.verified) {
-            await fetch('/api/payment-notify', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                name: formData.name,
-                email: formData.email,
-                message: formData.message,
-                service: title,
+            try {
+              await notifyPaymentEmail({
+                title,
+                formData,
+                amountInRs: orderData.amountInRs,
                 paymentId: response.razorpay_payment_id,
-                amount: orderData.amountInRs,
-              }),
-            });
+              });
+            } catch (e) {
+              console.error('Payment confirmation email failed:', e);
+            }
             onPaymentSuccess();
           } else {
             onPaymentError();
