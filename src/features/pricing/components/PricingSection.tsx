@@ -1,17 +1,21 @@
 'use client';
 
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { STAGGER_CONTAINER, SPRING_WEIGHTED } from '@/lib/motion';
 import PricingCard from './PricingCard';
 import Button from '@/components/ui/Button';
-import { useRouter } from 'next/navigation';
+
+const CustomQuoteModal = lazy(() => 
+  import('./CustomQuoteModal').then((module) => ({ default: module.default }))
+);
 
 interface PricingProps {
   sectionNumber?: string;
 }
 
 export default function Pricing({ sectionNumber = "03" }: PricingProps) {
-  const router = useRouter();
+  const [showCustomQuoteModal, setShowCustomQuoteModal] = useState(false);
 
   const plans = [
     {
@@ -103,12 +107,21 @@ export default function Pricing({ sectionNumber = "03" }: PricingProps) {
         <Button 
           variant="primary" 
           className="whitespace-nowrap !px-12"
-          onClick={() => router.push('/contact', { scroll: false })}
+          onClick={() => setShowCustomQuoteModal(true)}
           icon="arrow"
         >
           Get Custom Quote
         </Button>
       </motion.div>
+
+      {showCustomQuoteModal && (
+        <Suspense fallback={null}>
+          <CustomQuoteModal
+            isOpen={showCustomQuoteModal}
+            onClose={() => setShowCustomQuoteModal(false)}
+          />
+        </Suspense>
+      )}
     </section>
   );
 }
