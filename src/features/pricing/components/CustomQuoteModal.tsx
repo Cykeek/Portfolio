@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Check, AlertCircle, ArrowLeft, Loader2, CheckCircle2, Minus, Plus } from 'lucide-react';
 import Button from '@/components/ui/Button';
+import { useLenis } from 'lenis/react';
 
 interface Service {
   id: string;
@@ -64,9 +65,11 @@ export default function CustomQuoteModal({ isOpen, onClose }: CustomQuoteModalPr
 
   const totalAmount = calculateTotal();
   const upfrontAmount = Math.round(totalAmount * 0.5);
+  const lenis = useLenis();
 
   useEffect(() => {
     if (isOpen) {
+      lenis?.stop();
       const scrollY = window.scrollY;
       document.documentElement.classList.add('modal-open');
       document.body.style.position = 'fixed';
@@ -76,6 +79,7 @@ export default function CustomQuoteModal({ isOpen, onClose }: CustomQuoteModalPr
       document.body.style.overflow = 'hidden';
       (window as unknown as Record<string, unknown>)._previousScrollY = scrollY;
     } else {
+      lenis?.start();
       const scrollY = (window as unknown as Record<string, unknown>)._previousScrollY as number || 0;
       document.documentElement.classList.remove('modal-open');
       document.body.style.position = '';
@@ -86,6 +90,7 @@ export default function CustomQuoteModal({ isOpen, onClose }: CustomQuoteModalPr
       window.scrollTo(0, scrollY);
     }
     return () => {
+      lenis?.start();
       document.documentElement.classList.remove('modal-open');
       document.body.style.position = '';
       document.body.style.top = '';
@@ -93,7 +98,7 @@ export default function CustomQuoteModal({ isOpen, onClose }: CustomQuoteModalPr
       document.body.style.right = '';
       document.body.style.overflow = '';
     };
-  }, [isOpen]);
+  }, [isOpen, lenis]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -176,9 +181,50 @@ export default function CustomQuoteModal({ isOpen, onClose }: CustomQuoteModalPr
 
   const handleBack = () => setStep(1);
 
-  const handlePayment = () => {
+  const handlePayment = async () => {
     if (validateForm() && agreedToTerms) {
       setPaymentStatus('processing');
+
+      try {
+        const servicesList = SERVICES
+          .filter(s => selectedServices.has(s.id))
+          .map(s => {
+            const quantity = serviceQuantities[s.id] || s.minQuantity;
+            return `${s.name} (₹${s.basePrice} x ${quantity} = ₹${s.basePrice * quantity})`;
+          })
+          .join('\n');
+
+        // Submit directly to Web3Forms from client (bypasses server block)
+        const WEB3FORMS_SUBMIT_URL = 'https://api.web3forms.com/submit';
+        const WEB3FORMS_ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || '';
+
+        await fetch(WEB3FORMS_SUBMIT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            access_key: WEB3FORMS_ACCESS_KEY,
+            subject: `📝 New Custom Quote Request - ₹${calculateTotal()}`,
+            from_name: formData.name,
+            email: formData.email,
+            message: `${formData.message || 'No message'}\n\n---\nSelected Services:\n${servicesList}\n\nTotal Amount: ₹${calculateTotal()}\nStatus: Custom Quote (No Payment)`,
+          }),
+        })
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              console.log('Web3Forms custom quote submitted:', data);
+            } else {
+              console.error('Web3Forms error:', data.message);
+            }
+          })
+          .catch(err => console.error('Web3Forms fetch error:', err));
+
+        setPaymentStatus('success');
+      } catch (error) {
+        console.error('Submission error:', error);
+        setPaymentStatus('error');
+        setStep(2);
+      }
     }
   };
 
@@ -280,7 +326,8 @@ export default function CustomQuoteModal({ isOpen, onClose }: CustomQuoteModalPr
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-            className="relative ml-auto w-full max-w-md h-full bg-[#0a0a0a] border-l border-white/10 flex flex-col"
+            data-modal-content
+            className="relative ml-auto w-full max-w-md h-full bg-[#0a0a0a] border-l border-white/10 flex flex-col min-h-0 will-change-transform"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between p-4 border-b border-white/10">
@@ -342,6 +389,9 @@ export default function CustomQuoteModal({ isOpen, onClose }: CustomQuoteModalPr
                   <p className="text-sm text-muted text-center mb-4">
                     We&apos;ll get back to you within 24 hours with your custom quote.
                   </p>
+                  <p className="text-sm text-white/70 text-center mb-4">
+                    Please check your email for the invoice.
+                  </p>
                   <Button variant="secondary" onClick={handleClose} className="!py-2 text-xs">
                     Close
                   </Button>
@@ -352,9 +402,13 @@ export default function CustomQuoteModal({ isOpen, onClose }: CustomQuoteModalPr
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
-                  className="flex-1 flex flex-col"
+                  className="flex-1 flex flex-col min-h-0"
                 >
-                  <div className="flex-1 p-4 overflow-y-auto space-y-2">
+                  <div 
+                    data-lenis-prevent
+                    className="flex-1 p-4 overflow-y-auto space-y-2"
+                    onWheel={(e) => e.stopPropagation()}
+                  >
                     {SERVICES.map(renderServiceItem)}
                   </div>
                   {renderAmountSection()}
@@ -365,9 +419,13 @@ export default function CustomQuoteModal({ isOpen, onClose }: CustomQuoteModalPr
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
-                  className="flex-1 flex flex-col"
+                  className="flex-1 flex flex-col min-h-0"
                 >
-                  <div className="flex-1 p-4 overflow-y-auto">
+                  <div 
+                    data-lenis-prevent
+                    className="flex-1 p-4 overflow-y-auto"
+                    onWheel={(e) => e.stopPropagation()}
+                  >
                     <div className="bg-white/5 rounded-lg border border-white/10 p-3 mb-4">
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-xs text-muted">Selected Services</span>

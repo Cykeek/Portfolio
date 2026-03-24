@@ -126,6 +126,7 @@ export default function PrePaymentModal({
   const handlePayment = () => {
     if (validateForm() && agreedToTerms) {
       setPaymentStatus('processing');
+
       onConfirm(
         formData,
         () => setPaymentStatus('success'),
@@ -176,6 +177,7 @@ export default function PrePaymentModal({
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+            data-modal-content
             className="relative ml-auto w-full max-w-sm h-full bg-[#0a0a0a] border-l border-white/10 flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
@@ -255,6 +257,9 @@ export default function PrePaymentModal({
                     ₹{upfrontAmount.toLocaleString()} received.<br />
                     Remaining ₹{(totalAmount - upfrontAmount).toLocaleString()} due before delivery.
                   </p>
+                  <p className="text-sm text-white/70 text-center mb-4">
+                    Please check your email for the invoice.
+                  </p>
                   <Button variant="secondary" onClick={handleClose} className="!py-2 text-xs">
                     Close
                   </Button>
@@ -265,7 +270,9 @@ export default function PrePaymentModal({
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
+                  data-lenis-prevent
                   className="flex-1 p-4 overflow-y-auto"
+                  onWheel={(e) => e.stopPropagation()}
                 >
                   <div className="mb-4">
                     <span className="text-[10px] font-medium tracking-widest text-muted uppercase">Selected Plan</span>
@@ -310,7 +317,9 @@ export default function PrePaymentModal({
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
+                  data-lenis-prevent
                   className="flex-1 p-4 overflow-y-auto"
+                  onWheel={(e) => e.stopPropagation()}
                 >
                   <div className="space-y-4">
                     <div>

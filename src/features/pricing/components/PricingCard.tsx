@@ -14,45 +14,6 @@ const PrePaymentModal = lazy(() =>
   import('./PrePaymentModal').then((module) => ({ default: module.default || EmptyModal }))
 );
 
-const WEB3FORMS_ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || '';
-const WEB3FORMS_SUBMIT_URL = 'https://api.web3forms.com/submit';
-
-async function notifyPaymentEmail(params: {
-  title: string;
-  formData: LeadFormData;
-  amountInRs: number;
-  paymentId: string;
-}): Promise<void> {
-  if (!WEB3FORMS_ACCESS_KEY) return;
-
-  const { title, formData, amountInRs, paymentId } = params;
-  const response = await fetch(WEB3FORMS_SUBMIT_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    },
-    body: JSON.stringify({
-      access_key: WEB3FORMS_ACCESS_KEY,
-      subject: `💰 Payment Received - ${title} - ₹${amountInRs}`,
-      from_name: formData.name,
-      email: formData.email,
-      message: `${formData.message}\n\n---\nService: ${title}\nAmount Paid: ₹${amountInRs}\nPayment ID: ${paymentId}\nStatus: Payment Successful`,
-      botcheck: '',
-    }),
-  });
-
-  const raw = await response.text();
-  try {
-    const data = JSON.parse(raw) as { success?: boolean; message?: string };
-    if (!data.success) {
-      console.error('Web3Forms payment notify:', data.message || raw.slice(0, 200));
-    }
-  } catch {
-    console.error('Web3Forms payment notify: non-JSON response', response.status);
-  }
-}
-
 interface PricingCardProps {
   title: string;
   price: string;
@@ -145,16 +106,32 @@ export default function PricingCard({
           }
 
           if (verifyResponse.ok && verifyData.verified) {
-            try {
-              await notifyPaymentEmail({
-                title,
-                formData,
-                amountInRs: orderData.amountInRs,
-                paymentId: response.razorpay_payment_id,
-              });
-            } catch (e) {
-              console.error('Payment confirmation email failed:', e);
-            }
+            // Send notification directly from client (bypasses server block)
+            // Note: hCaptcha already validated in PrePaymentModal, this is just a follow-up
+            const WEB3FORMS_SUBMIT_URL = 'https://api.web3forms.com/submit';
+            const WEB3FORMS_ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || '';
+
+            fetch(WEB3FORMS_SUBMIT_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                access_key: WEB3FORMS_ACCESS_KEY,
+                subject: `💰 Payment Received - ${title} - ₹${orderData.amountInRs}`,
+                from_name: formData.name,
+                email: formData.email,
+                message: `${formData.message || 'No message'}\n\n---\nService: ${title}\nAmount Paid: ₹${orderData.amountInRs}\nPayment ID: ${response.razorpay_payment_id}\nStatus: Payment Successful`,
+              }),
+            })
+              .then(res => res.json())
+              .then(data => {
+                if (data.success) {
+                  console.log('Web3Forms payment notification sent:', data);
+                } else {
+                  console.error('Web3Forms error:', data.message);
+                }
+              })
+              .catch(err => console.error('Web3Forms fetch error:', err));
+            
             onPaymentSuccess();
           } else {
             onPaymentError();

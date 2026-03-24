@@ -81,7 +81,6 @@ export default function PrivacyPage() {
             <ul className="list-disc pl-5 space-y-2">
               <li><strong>Vercel:</strong> Hosting and analytics infrastructure. <a href="https://vercel.com/legal/privacy-policy" className="text-white underline" target="_blank" rel="noopener noreferrer">Privacy Policy</a></li>
               <li><strong>Web3Forms:</strong> Form submission service. <a href="https://web3forms.com/privacy" className="text-white underline" target="_blank" rel="noopener noreferrer">Privacy Policy</a></li>
-              <li><strong>hCaptcha:</strong> Spam protection. <a href="https://www.hcaptcha.com/privacy" className="text-white underline" target="_blank" rel="noopener noreferrer">Privacy Policy</a></li>
             </ul>
           </div>
         </section>

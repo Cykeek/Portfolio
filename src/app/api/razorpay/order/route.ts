@@ -4,9 +4,9 @@ const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID;
 const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET;
 
 const VALID_PLANS: Record<string, number> = {
-  'brand-setup': 2499,
-  'startup-plan': 7499,
-  'growth-plan': 24999,
+  'brand-setup': 4999,
+  'startup-plan': 14999,
+  'growth-plan': 49999,
 };
 
 export async function POST(request: NextRequest) {
