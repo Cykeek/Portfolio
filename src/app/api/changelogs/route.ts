@@ -6,7 +6,7 @@ const REPO_NAME = 'Portfolio';
 export async function GET() {
   try {
     const response = await fetch(
-      `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/commits?per_page=20`,
+      `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/commits?per_page=100`,
       {
         headers: {
           'Accept': 'application/vnd.github.v3+json',
