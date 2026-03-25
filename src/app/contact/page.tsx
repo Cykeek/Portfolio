@@ -44,10 +44,10 @@ export default function ContactPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16 md:mb-24">
           <ContactForm />
           
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-6 flex-1">
             <AvailabilityWidget />
             
-            <Card className="p-8 flex flex-col gap-8 h-full">
+            <Card className="p-8 flex flex-col gap-8">
               <h3 className="text-xl font-bold tracking-tighter uppercase">Social Systems</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {[

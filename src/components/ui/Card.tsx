@@ -16,7 +16,7 @@ export default function Card({ children, className = '' }: CardProps) {
       viewport={{ once: true, margin: "-50px" }}
       transition={SPRING_WEIGHTED}
       whileHover="hover"
-      className={`group relative flex flex-col justify-between bg-white/[0.02] backdrop-blur-md border border-white/5 rounded-md overflow-hidden transition-all duration-500 hover:bg-white/[0.04] hover:border-white/10 ${className}`}
+      className={`group relative flex flex-col bg-white/[0.02] backdrop-blur-md border border-white/5 rounded-md overflow-hidden transition-all duration-500 hover:bg-white/[0.04] hover:border-white/10 ${className}`}
     >
       {/* Global Background Glow Effect on Hover */}
       <motion.div 

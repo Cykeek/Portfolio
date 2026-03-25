@@ -46,7 +46,7 @@ export default function AvailabilityWidget() {
   const currentStatus = statusConfig[status];
 
   return (
-    <Card className="p-8 flex flex-col gap-8 h-full">
+    <Card className="p-8 flex flex-col gap-8">
       <div className="flex items-center justify-between">
         <h3 className="text-xl font-bold tracking-tighter uppercase">Local Presence</h3>
         <div className="flex items-center gap-2 px-3 py-1 bg-white/5 border border-white/10 rounded-full">

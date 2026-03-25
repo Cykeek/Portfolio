@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import { SPRING_WEIGHTED } from '@/lib/motion';
-import { CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+import { CheckCircle2, AlertCircle } from 'lucide-react';
 
 const WEB3FORMS_ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || '';
 const WEB3FORMS_SUBMIT_URL = 'https://api.web3forms.com/submit';
@@ -16,9 +16,45 @@ interface FormErrors {
   message?: string;
 }
 
+interface InputFieldProps {
+  label: string;
+  name: keyof FormErrors;
+  type: 'text' | 'email';
+  placeholder: string;
+  value: string;
+  error?: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+}
+
+function InputField({ label, name, type, placeholder, value, error, onChange }: InputFieldProps) {
+  return (
+    <div className="flex flex-col gap-3">
+      <label className="text-[10px] font-bold tracking-[0.3em] text-muted uppercase ml-1">
+        {label}
+      </label>
+      <input
+        name={name}
+        type={type}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        className={`bg-white/5 border rounded-sm px-6 py-4 text-sm focus:outline-none transition-colors ${
+          error 
+            ? 'border-red-500 focus:border-red-500' 
+            : 'border-white/10 focus:border-white/30'
+        }`}
+      />
+      {error && (
+        <span className="text-red-500 text-[10px] font-medium tracking-widest flex items-center gap-1">
+          <AlertCircle className="w-3 h-3" />
+          {error}
+        </span>
+      )}
+    </div>
+  );
+}
+
 export default function ContactForm() {
-  const [activeService, setActiveService] = useState<string | null>(null);
-  const [serviceError, setServiceError] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formErrors, setFormErrors] = useState<FormErrors>({});
@@ -29,12 +65,6 @@ export default function ContactForm() {
     message: ''
   });
 
-  const services = [
-    "Brand Setup",
-    "Startup Plan",
-    "Growth Plan",
-    "Custom Project"
-  ];
 
   const validateEmail = (email: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -71,19 +101,9 @@ export default function ContactForm() {
     }
   };
 
-  const handleServiceSelect = (service: string) => {
-    setActiveService(service);
-    setServiceError(false);
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitError(null);
-    
-    if (!activeService) {
-      setServiceError(true);
-      return;
-    }
     
     if (!validateForm()) {
       return;
@@ -106,10 +126,10 @@ export default function ContactForm() {
         },
         body: JSON.stringify({
           access_key: WEB3FORMS_ACCESS_KEY,
-          subject: `New Project Inquiry - ${activeService}`,
+          subject: 'New Project Inquiry',
           from_name: formData.name,
           email: formData.email,
-          message: `${formData.message}\n\nService: ${activeService}`,
+          message: formData.message,
           botcheck: '',
         }),
       });
@@ -126,8 +146,6 @@ export default function ContactForm() {
       if (data.success) {
         setIsSubmitted(true);
         setFormData({ name: '', email: '', message: '' });
-        setActiveService(null);
-        setServiceError(false);
       } else {
         const msg =
           data.message ||
@@ -156,77 +174,28 @@ export default function ContactForm() {
             className="flex flex-col gap-10"
           >
             <div className="flex flex-col gap-6">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                <h3 className="text-xl font-bold tracking-tighter uppercase">Project Starter</h3>
-                {serviceError && (
-                  <span className="text-red-500 text-[10px] font-medium tracking-widest uppercase">
-                    Please select a service
-                  </span>
-                )}
-              </div>
-              <div className="flex flex-wrap gap-3">
-                {services.map((service) => (
-                  <button
-                    key={service}
-                    type="button"
-                    onClick={() => handleServiceSelect(service)}
-                    className={`px-5 py-2.5 rounded-full text-[11px] font-bold tracking-widest uppercase transition-all duration-300 border ${
-                      activeService === service 
-                        ? 'bg-white text-black border-white' 
-                        : serviceError
-                          ? 'bg-red-500/10 text-red-500 border-red-500/30 hover:border-red-500/50'
-                          : 'bg-white/5 text-muted border-white/10 hover:border-white/20'
-                    }`}
-                  >
-                    {service}
-                  </button>
-                ))}
-              </div>
+              <h3 className="text-xl font-bold tracking-tighter uppercase">Project Starter</h3>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="flex flex-col gap-3">
-                <label className="text-[10px] font-bold tracking-[0.3em] text-muted uppercase ml-1">Full Name</label>
-                <input 
-                  name="name"
-                  type="text" 
-                  placeholder="John Doe"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className={`bg-white/5 border rounded-sm px-6 py-4 text-sm focus:outline-none transition-colors ${
-                    formErrors.name 
-                      ? 'border-red-500 focus:border-red-500' 
-                      : 'border-white/10 focus:border-white/30'
-                  }`}
-                />
-                {formErrors.name && (
-                  <span className="text-red-500 text-[10px] font-medium tracking-widest flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3" />
-                    {formErrors.name}
-                  </span>
-                )}
-              </div>
-              <div className="flex flex-col gap-3">
-                <label className="text-[10px] font-bold tracking-[0.3em] text-muted uppercase ml-1">Email Address</label>
-                <input 
-                  name="email"
-                  type="email" 
-                  placeholder="john@example.com"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className={`bg-white/5 border rounded-sm px-6 py-4 text-sm focus:outline-none transition-colors ${
-                    formErrors.email 
-                      ? 'border-red-500 focus:border-red-500' 
-                      : 'border-white/10 focus:border-white/30'
-                  }`}
-                />
-                {formErrors.email && (
-                  <span className="text-red-500 text-[10px] font-medium tracking-widest flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3" />
-                    {formErrors.email}
-                  </span>
-                )}
-              </div>
+              <InputField
+                label="Full Name"
+                name="name"
+                type="text"
+                placeholder="John Doe"
+                value={formData.name}
+                error={formErrors.name}
+                onChange={handleChange}
+              />
+              <InputField
+                label="Email Address"
+                name="email"
+                type="email"
+                placeholder="john@example.com"
+                value={formData.email}
+                error={formErrors.email}
+                onChange={handleChange}
+              />
             </div>
 
             <div className="flex flex-col gap-3">
