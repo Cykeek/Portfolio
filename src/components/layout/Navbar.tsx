@@ -2,14 +2,15 @@
 
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
 import { SPRING_WEIGHTED } from '@/lib/motion';
-import { DollarSign, Mail } from 'lucide-react';
-import { useState } from 'react';
+import { DollarSign, Mail, GitBranch } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useLenis } from 'lenis/react';
 
 const navItems = [
   { name: 'PRICING', id: 'pricing', icon: DollarSign, isPage: true },
   { name: 'CONTACT', id: 'contact', icon: Mail, isPage: true },
+  { name: 'CHANGELOGS', id: 'changelogs', icon: GitBranch, isPage: true },
 ];
 
 export default function Navbar() {
@@ -17,9 +18,14 @@ export default function Navbar() {
   const router = useRouter();
   const lenis = useLenis();
   const [scrollActiveItem, setScrollActiveItem] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
   const { scrollY } = useScroll();
 
-  const activeItem = pathname === '/' 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const activeItem = !mounted ? null : pathname === '/' 
     ? scrollActiveItem 
     : navItems.find(item => item.isPage && pathname === `/${item.id}`)?.name || null;
 

@@ -49,3 +49,7 @@ next-env.d.ts
 
 # zed
 .Zed/
+
+# zed
+.Zed/
+!.Zed/SKILLS.md
