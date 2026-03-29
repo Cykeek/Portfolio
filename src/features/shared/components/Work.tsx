@@ -58,7 +58,7 @@ export default function Work({ sectionNumber = "01" }: WorkProps) {
           href={dribbbleUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="md:col-span-3 min-h-[400px] border border-white/5 rounded-md flex flex-col items-center justify-center gap-8 bg-white/[0.01] group cursor-pointer hover:bg-white/[0.02] transition-all duration-500 relative overflow-hidden"
+          className="md:col-span-3 min-h-[400px] border border-white/5 rounded-sm flex flex-col items-center justify-center gap-8 bg-white/[0.01] group cursor-pointer hover:bg-white/[0.02] transition-all duration-500 relative overflow-hidden"
         >
           {/* Animated gradient background on hover */}
           <div className="absolute inset-0 bg-gradient-to-br from-pink-500/10 via-transparent to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />

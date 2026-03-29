@@ -95,7 +95,7 @@ export default function Pricing({ sectionNumber = "03" }: PricingProps) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ ...SPRING_WEIGHTED, delay: 0.4 }}
-        className="bg-white/[0.02] border border-white/5 rounded-md p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 group hover:bg-white/[0.04] transition-all duration-500"
+        className="bg-white/[0.02] border border-white/5 rounded-sm p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 group hover:bg-white/[0.04] transition-all duration-500"
       >
         <div className="flex flex-col gap-4 text-center md:text-left">
           <h3 className="text-2xl md:text-3xl font-bold tracking-tighter">Have a different plan in mind?</h3>

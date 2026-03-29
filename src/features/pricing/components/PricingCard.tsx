@@ -156,7 +156,7 @@ export default function PricingCard({
         initial: { opacity: 0, y: 20 },
         animate: { opacity: 1, y: 0, transition: SPRING_WEIGHTED }
       }}
-      className={`relative flex flex-col p-8 rounded-md border ${
+      className={`relative flex flex-col p-8 rounded-sm border ${
         isPopular ? 'bg-white/[0.04] border-white/20' : 'bg-white/[0.02] border-white/5'
       } group hover:bg-white/[0.06] transition-all duration-500`}
     >

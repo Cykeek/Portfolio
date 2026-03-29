@@ -130,7 +130,7 @@ export default function Services({ sectionNumber = "01" }: ServicesProps) {
         {/* Metric Card 1 */}
         <motion.div 
           variants={{ initial: { y: 20, opacity: 0 }, animate: { y: 0, opacity: 1, transition: SPRING_WEIGHTED }}}
-          className="md:col-span-1 bg-white/[0.02] border border-white/5 rounded-md p-8 flex flex-col justify-between group hover:bg-white/[0.04] transition-all duration-500"
+          className="md:col-span-1 bg-white/[0.02] border border-white/5 rounded-sm p-8 flex flex-col justify-between group hover:bg-white/[0.04] transition-all duration-500"
         >
           <span className="text-[12px] font-medium tracking-widest text-muted uppercase">Project Load</span>
           <div className="flex flex-col gap-1">
@@ -154,7 +154,7 @@ export default function Services({ sectionNumber = "01" }: ServicesProps) {
         {/* Metric Card 2 */}
         <motion.div 
           variants={{ initial: { y: 20, opacity: 0 }, animate: { y: 0, opacity: 1, transition: SPRING_WEIGHTED }}}
-          className="md:col-span-1 bg-white/[0.02] border border-white/5 rounded-md p-8 flex flex-col justify-between group hover:bg-white/[0.04] transition-all duration-500"
+          className="md:col-span-1 bg-white/[0.02] border border-white/5 rounded-sm p-8 flex flex-col justify-between group hover:bg-white/[0.04] transition-all duration-500"
         >
           <span className="text-[12px] font-medium tracking-widest text-muted uppercase">Global Reach</span>
           <div className="flex flex-col gap-1">
