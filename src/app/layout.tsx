@@ -90,6 +90,12 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <Script
+          src="https://datafa.st/js/script.js"
+          data-website-id="dfid_Sygpg9oKIuSr4ysD97kZI"
+          data-domain="cykeek.online"
+          strategy="afterInteractive"
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
